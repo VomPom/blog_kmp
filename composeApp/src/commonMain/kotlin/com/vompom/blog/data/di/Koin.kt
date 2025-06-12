@@ -15,6 +15,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
 /**
@@ -44,11 +45,12 @@ val viewModelModule = module {
     factoryOf(::StatsViewModel)
 }
 
-fun initKoin() {
+fun initKoin(additionAppDeclaration: KoinAppDeclaration) {
     startKoin {
         modules(
             dataModule,
             viewModelModule
         )
+        additionAppDeclaration()
     }
 }

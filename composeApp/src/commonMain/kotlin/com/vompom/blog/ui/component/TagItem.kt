@@ -3,7 +3,10 @@ package com.vompom.blog.ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,14 +45,13 @@ fun TagItem(
         Image(
             painter = painterResource(Res.drawable.ic_post_tag),
             contentDescription = "Tag icon",
-            modifier = Modifier.size(15.dp).background(Color.Green)
+            modifier = Modifier.size(15.dp)
         )
 
         Text(
             text = data.name,
             color = Color(0xFF333333),
             fontSize = 12.sp,
-            modifier = Modifier.background(Color.Red).wrapContentHeight()
         )
 
         if (showCount) {
@@ -57,7 +59,6 @@ fun TagItem(
                 text = "(${data.count})",
                 color = Color(0xFF333333),
                 fontSize = 8.sp,
-                modifier = Modifier.background(Color.Blue).wrapContentHeight()
             )
         }
     }

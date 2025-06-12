@@ -54,7 +54,7 @@ fun CategoryItem(
         Text(
             text = "(${data.count})",
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-            fontSize = 10.sp
+            fontSize = 12.sp
         )
     }
 }

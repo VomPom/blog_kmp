@@ -2,6 +2,7 @@ package com.vompom.blog
 
 import android.app.Application
 import com.vompom.blog.data.di.initKoin
+import org.koin.android.ext.koin.androidContext
 
 /**
  *
@@ -13,6 +14,8 @@ import com.vompom.blog.data.di.initKoin
 class VMBlogApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        initKoin()
+        initKoin {
+            androidContext(this@VMBlogApp)
+        }
     }
 }

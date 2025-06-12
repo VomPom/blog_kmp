@@ -1,17 +1,13 @@
 package com.vompom.blog
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.vompom.blog.ui.PostScreen
-import com.vompom.blog.ui.StatsScreen
+import com.vompom.blog.ui.HomeScreen
+import com.vompom.blog.ui.theme.VMTheme
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -19,26 +15,26 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-    MaterialTheme(
-        colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
-    ) {
+    VMTheme {
         Surface {
             val navController: NavHostController = rememberNavController()
-            NavHost(navController = navController, startDestination = StatsMain) {
-                composable<PostMain> {
-                    PostScreen()
+            NavHost(navController = navController, startDestination = Home) {
+                composable<Home> {
+                    HomeScreen()
                 }
-                composable<StatsMain> {
-                    StatsScreen()
+                composable<PostDetail> {
+                    HomeScreen()
                 }
             }
         }
     }
 }
 
+@Serializable
+object Home
 
 @Serializable
-object PostMain
+object PostDetail
 
 @Serializable
-object StatsMain
+object Tag

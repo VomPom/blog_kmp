@@ -22,9 +22,7 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
@@ -82,6 +80,12 @@ kotlin {
 
             implementation(libs.koin.core)
             implementation(libs.koin.compose.viewmodel)
+
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.okhttp)
+
+            implementation(libs.kotlinx.datetime)
+            implementation("androidx.datastore:datastore-preferences:1.1.7")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -103,7 +107,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "2.0"
+        versionName = "1.0.0"
     }
     packaging {
         resources {
