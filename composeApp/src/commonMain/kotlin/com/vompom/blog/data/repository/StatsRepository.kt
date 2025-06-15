@@ -4,7 +4,6 @@ import com.vompom.blog.data.api.StatsApi
 import com.vompom.blog.data.model.Category
 import com.vompom.blog.data.model.Tag
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 /**
  * Created by @juliswang on 2025/05/28 15:18
@@ -12,17 +11,13 @@ import kotlinx.coroutines.flow.flow
  * @Description
  */
 
-class StatsRepository(private val api: StatsApi) {
-    fun loadTags(): Flow<List<Tag>> {
-        return flow {
-            emit(api.loadTags().data)
-        }
+class StatsRepository(private val api: StatsApi) : BaseRepository() {
+    fun loadTags(): Flow<List<Tag>> = load("tag") {
+        api.loadTags().data
     }
 
-    fun loadCategories(): Flow<List<Category>> {
-        return flow {
-            emit(api.loadCategories().data)
-        }
+    fun loadCategories(): Flow<List<Category>> = load("category") {
+        api.loadCategories().data
     }
 
 }
