@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,19 +26,37 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VMToolbar(title: String = "", icon: ImageVector? = null, action: (() -> Unit)? = null) {
+fun VMToolbar(
+    title: String = "",
+    icon: ImageVector? = null,
+    withBackIcon: Boolean = false,
+    action: (() -> Unit)? = null,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            modifier = Modifier,
-            text = title,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            // todo:: back to last page...
+            if (withBackIcon) {
+                IconButton(
+                    modifier = Modifier.size(36.dp),
+                    onClick = { }) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Localized description"
+                    )
+                }
+            }
+            Text(
+                modifier = Modifier,
+                text = title,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         if (icon != null) {
             IconButton(
                 modifier = Modifier.size(36.dp),

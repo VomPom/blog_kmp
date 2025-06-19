@@ -19,8 +19,8 @@ import com.vompom.blog.data.model.Category
 import com.vompom.blog.data.model.Tag
 import com.vompom.blog.ui.component.CategoryItem
 import com.vompom.blog.ui.component.ContentContainer
+import com.vompom.blog.ui.component.ScreenContainer
 import com.vompom.blog.ui.component.TagItem
-import com.vompom.blog.ui.component.VMToolbar
 import com.vompom.blog.ui.utils.PreviewWrapper
 import com.vompom.blog.viewmodel.StatsViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -31,31 +31,24 @@ import org.koin.compose.viewmodel.koinViewModel
  *
  * @Description
  */
-
-@Composable
-fun StatsScreen() {
-    val viewModel = koinViewModel<StatsViewModel>()
-    Content(viewModel)
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Content(viewModel: StatsViewModel) {
+fun StatsScreen(
+    onTagClicked: OnTagClicked,
+    onCategoryClicked: OnCategoryClicked,
+) {
+    val viewModel = koinViewModel<StatsViewModel>()
     val categoryList by viewModel.loadCategories().collectAsStateWithLifecycle(emptyList())
     val tags by viewModel.loadTags().collectAsStateWithLifecycle(emptyList())
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        VMToolbar("统计", Icons.Filled.Refresh)
-        Summary(
-            tags,
-            categoryList
-        )
+    ScreenContainer("统计", Icons.Filled.Refresh) {
+        Summary(tags, categoryList)
 
         ContentContainer("#分类") {
-            Categories(categoryList)
+            Categories(categoryList, onCategoryClicked)
         }
         ContentContainer("#标签") {
-            Tags(tags)
+            Tags(tags, onTagClicked)
         }
     }
 }
@@ -107,22 +100,24 @@ fun Summary(tags: List<Tag>, categories: List<Category>) {
 }
 
 @Composable
-fun Tags(tags: List<Tag>) {
+fun Tags(tags: List<Tag>, onTagClicked: OnTagClicked) {
     StatsFlowRow {
         tags.forEach { tag ->
             TagItem(tag, true) {
                 println("onclick item:$tag")
+                onTagClicked(tag)
             }
         }
     }
 }
 
 @Composable
-fun Categories(categoryList: List<Category>) {
+fun Categories(categoryList: List<Category>, onCategoryClicked: OnCategoryClicked) {
     StatsFlowRow {
         categoryList.forEach { item ->
             CategoryItem(item) {
                 println("onclick item:$item")
+                onCategoryClicked(item)
             }
         }
     }
@@ -145,7 +140,7 @@ fun StatsFlowRow(content: @Composable FlowRowScope.() -> Unit) {
 fun StatsLabel(
     count: Int,
     label: String,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -184,6 +179,8 @@ fun StatsLabel(
     }
 }
 
+typealias OnCategoryClicked = (Category) -> Unit
+typealias OnTagClicked = (Tag) -> Unit
 
 @Preview()
 @Composable

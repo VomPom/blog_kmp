@@ -3,8 +3,6 @@ package com.vompom.blog.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +20,7 @@ import coil3.compose.AsyncImage
 import com.vompom.blog.data.Config
 import com.vompom.blog.platform.AppInstallInfo
 import com.vompom.blog.ui.component.ContentContainer
-import com.vompom.blog.ui.component.VMToolbar
+import com.vompom.blog.ui.component.ScreenContainer
 import com.vompom.blog.ui.utils.PreviewWrapper
 import com.vompom.blog.utils.TimeUtils
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -35,11 +33,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
 @Composable
-fun MineScreen() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        VMToolbar("我", Icons.Filled.Refresh)
+fun MineScreen(onDebugClicked: () -> Unit) {
+    ScreenContainer("我") {
         Info()
-        Settings()
+        Settings(onDebugClicked)
         About()
     }
 }
@@ -74,9 +71,9 @@ fun Info() {
 }
 
 @Composable
-fun Settings() {
+fun Settings(onDebugClicked: () -> Unit) {
     ContentContainer("设置", 15.sp, FontWeight.Bold) {
-        Text("todo settings...")
+        InfoItem("Debug", "", modifier = Modifier.clickable { onDebugClicked() })
     }
 }
 
@@ -98,7 +95,7 @@ fun About() {
 fun InfoItem(
     title: String,
     data: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -122,6 +119,6 @@ fun InfoItem(
 @Composable
 fun MinePreview() {
     PreviewWrapper {
-        MineScreen()
+        MineScreen({})
     }
 }

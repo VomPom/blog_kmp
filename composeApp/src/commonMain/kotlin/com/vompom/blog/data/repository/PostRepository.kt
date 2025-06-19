@@ -1,7 +1,8 @@
 package com.vompom.blog.data.repository
 
 import com.vompom.blog.data.api.PostApi
-import com.vompom.blog.data.model.PageList
+import com.vompom.blog.data.model.PageResponse
+import com.vompom.blog.data.model.PostResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -11,10 +12,16 @@ import kotlinx.coroutines.flow.Flow
  */
 
 class PostRepository(private val postApi: PostApi) : BaseRepository() {
-    suspend fun getData(): PageList = postApi.getData()
-
-
-    fun loadCategories(): Flow<PageList> = load("pageList") {
-        postApi.getData()
+    fun getAllPostPages(): Flow<PageResponse> = load("allPostPages") {
+        postApi.getAllPostPages() ?: PageResponse()
     }
+
+    fun getPostPage(api: String): Flow<PageResponse> = load("postPages-$api") {
+        postApi.getPostPage(api) ?: PageResponse()
+    }
+
+    fun getPosts(api: String): Flow<PostResponse> = load("post-$api") {
+        postApi.getPosts(api) ?: PostResponse()
+    }
+
 }

@@ -7,7 +7,7 @@ package com.vompom
  * @Description
  */
 object AppConfig {
-    const val BASE_URL = "https://cdn.julis.wang/blog";
+    const val BASE_URL = "https://julis.wang";
     const val AVATAR = "https://cdn.julis.wang/blogavatar.png";
     const val BLOG_URL = "https://julis.wang";
     const val BLOG_NAME = "落叶挽歌";

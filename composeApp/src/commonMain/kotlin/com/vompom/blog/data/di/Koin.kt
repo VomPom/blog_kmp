@@ -10,6 +10,7 @@ import com.vompom.blog.viewmodel.PostViewModel
 import com.vompom.blog.viewmodel.StatsViewModel
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
@@ -27,9 +28,17 @@ import org.koin.dsl.module
 val dataModule = module {
     single {
         val json = Json { ignoreUnknownKeys = true }
-        HttpClient {
+        HttpClient() {
             install(ContentNegotiation) {
                 json(json, contentType = ContentType.Any)
+            }
+            install(Logging) {
+                level = LogLevel.HEADERS
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        println(message)
+                    }
+                }
             }
         }
     }

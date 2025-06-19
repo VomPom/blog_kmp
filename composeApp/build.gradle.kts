@@ -74,6 +74,7 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.logging)
 
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
@@ -85,7 +86,7 @@ kotlin {
             implementation(libs.coil.network.okhttp)
 
             implementation(libs.kotlinx.datetime)
-            implementation("androidx.datastore:datastore-preferences:1.1.7")
+            implementation(libs.androidx.datastore.preferences)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -126,6 +127,7 @@ android {
 }
 
 dependencies {
+
     debugImplementation(compose.uiTooling)
 }
 
