@@ -87,6 +87,8 @@ kotlin {
 
             implementation(libs.kotlinx.datetime)
             implementation(libs.androidx.datastore.preferences)
+
+            implementation(libs.compose.webview.multiplatform)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

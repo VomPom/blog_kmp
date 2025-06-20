@@ -12,9 +12,6 @@ import kotlinx.coroutines.flow.Flow
  */
 
 class PostRepository(private val postApi: PostApi) : BaseRepository() {
-    fun getAllPostPages(): Flow<PageResponse> = load("allPostPages") {
-        postApi.getAllPostPages() ?: PageResponse()
-    }
 
     fun getPostPage(api: String): Flow<PageResponse> = load("postPages-$api") {
         postApi.getPostPage(api) ?: PageResponse()

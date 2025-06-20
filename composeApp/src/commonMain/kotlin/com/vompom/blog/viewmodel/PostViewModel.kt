@@ -3,7 +3,9 @@ package com.vompom.blog.viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vompom.blog.data.model.*
+import com.vompom.blog.data.model.Page
+import com.vompom.blog.data.model.Post
+import com.vompom.blog.data.model.PostUiState
 import com.vompom.blog.data.repository.PostRepository
 import com.vompom.blog.ui.component.Paginator
 import com.vompom.blog.ui.component.UiState
@@ -17,18 +19,14 @@ import kotlinx.coroutines.flow.*
  */
 
 class PostViewModel(private val repository: PostRepository) : ViewModel() {
-
-    //todo:: simple...
-    var api: String = ""
+    var pageApi: String = ""
     private val _uiState = MutableStateFlow(PostUiState())
     val uiState: StateFlow<PostUiState> = _uiState.asStateFlow()
     private val _pages = mutableStateListOf<Page>()
     private var _maxPage = 0
 
-
     private val paginator = Paginator(
         scope = viewModelScope,
-        initialApi = api,
         initialKey = 1,
         incrementBy = 1,
         onLoadUpdated = { isLoading ->
@@ -38,7 +36,7 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
             }
         },
         onRequest = { nextKey ->
-            loadPosts(api, nextKey)
+            loadPosts(pageApi, nextKey)
         },
         onError = { throwable ->
             _uiState.update { it.copy(errorMessage = throwable.message) }
@@ -73,42 +71,42 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
         }
     }
 
+    /**
+     * 加载文章，先请求 pages 获取到之后再请求 post 数据
+     *
+     * @param initApi
+     * @param index
+     * @return
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun loadPosts(api: String, index: Int): Flow<UiState<List<Post>>> {
+    private fun loadPosts(initApi: String, index: Int): Flow<UiState<List<Post>>> {
         return flow {
             if (_pages.isEmpty()) {
-                loadPostPageByType(api)
-                    .flatMapConcat {
+                loadPostPageByType(initApi)
+                    .flatMapConcat {    // equals  collect { value -> emitAll(value) }
                         realLoadPosts(0)
                     }
-                    // todo:: why first is ok?
-                    .collectIndexed { index, page ->
-                        emit(UiState.Success(page))
+                    .collect { posts ->
+                        emit(UiState.Success(posts)) // 最终数据
                     }
-//                    .first()
-//                    .collect { posts ->
-//                        emit(UiState.Success(posts)) // 最终数据
-//                    }
-//                emit(UiState.Success(posts))
             } else {
                 realLoadPosts(index).collect { posts ->
                     emit(UiState.Success(posts))
                 }
             }
-
         }
     }
 
-
-    fun loadPosts(api: String) {
-        this.api = api
+    fun loadPosts(pagApi: String) {
+        this.pageApi = pagApi
         paginator.loadNextItems()
     }
 
-    fun loadAllPostPagePages(): Flow<PageResponse> = repository.getAllPostPages()
+    fun fresh() {
+        _pages.clear()
+        paginator.reset()
+        loadPosts(this.pageApi)
+    }
 
-    //    fun loadPostPage(api: String): Flow<PageResponse> = repository.getPostPage(api)
-    fun getPosts(api: String): Flow<PostResponse> = repository.getPosts(api)
-
-
+    fun loadMore() = loadPosts(this.pageApi)
 }

@@ -1,7 +1,9 @@
 package com.vompom.blog.data.repository
 
+import com.vompom.blog.data.api.PostApi
 import com.vompom.blog.data.api.StatsApi
 import com.vompom.blog.data.model.Category
+import com.vompom.blog.data.model.Post
 import com.vompom.blog.data.model.Tag
 import kotlinx.coroutines.flow.Flow
 
@@ -11,7 +13,11 @@ import kotlinx.coroutines.flow.Flow
  * @Description
  */
 
-class StatsRepository(private val api: StatsApi) : BaseRepository() {
+class StatsRepository(private val api: StatsApi, private val postApi: PostApi) : BaseRepository() {
+    fun getAllPost(): Flow<List<Post>> = load("tag") {
+        postApi.getAllPost()?.data ?: emptyList()
+    }
+
     fun loadTags(): Flow<List<Tag>> = load("tag") {
         api.loadTags().data
     }

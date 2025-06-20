@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
  */
 class Paginator<T>(
     private val scope: CoroutineScope,
-    private var initialApi: String? = null,
     private val initialKey: Int = 1,
     private val incrementBy: Int = 1,
     private val onLoadUpdated: (Boolean) -> Unit,

@@ -46,7 +46,7 @@ val dataModule = module {
     single { PostRepository(get()) }
 
     single<StatsApi> { StatsApiImpl(get()) }
-    single { StatsRepository(get()) }
+    single { StatsRepository(get(), get()) }
 
 }
 val viewModelModule = module {

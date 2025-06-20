@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.vompom.blog.navigation.Routes
+import com.vompom.blog.ui.OnPostClick
 import com.vompom.blog.ui.component.ContentColumn
 import com.vompom.blog.ui.component.OnPagination
 import com.vompom.blog.ui.component.ScreenContainer
@@ -23,7 +24,7 @@ import org.koin.compose.viewmodel.koinViewModel
  * @Description
  */
 @Composable
-fun PostTypeScreen(postType: Routes.PostType, onPostClick: () -> Unit = {}) {
+fun PostTypeScreen(postType: Routes.PostType, onPostClick: OnPostClick = {}) {
     val viewModel = koinViewModel<PostViewModel>()
     val uiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
@@ -41,11 +42,16 @@ fun PostTypeScreen(postType: Routes.PostType, onPostClick: () -> Unit = {}) {
             ) {
                 LazyColumn(state = listState) {
                     items(uiState.posts.size) { index ->
-                        PostSummary(uiState.posts[index], index, scene = PostItemScene.DEFAULT, onPostClick)
+                        PostSummary(
+                            data = uiState.posts[index],
+                            index = index,
+                            scene = PostItemScene.DEFAULT,
+                            onPostClick = onPostClick
+                        )
                     }
                 }
                 OnPagination(listState) {
-                    viewModel.loadPosts(postType.api)
+                    viewModel.loadMore()
                 }
             }
         }

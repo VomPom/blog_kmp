@@ -6,10 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.vompom.blog.platform.createDataStore
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.io.IOException
 import kotlinx.serialization.json.Json
 import kotlin.concurrent.Volatile
@@ -57,6 +54,11 @@ open class BaseRepository {
                     Json.decodeFromString<T>(data)
                 }
             }
+            // !!! take(1) 仅获取第一次值后停止监听
+            // 由于 dataStore.data 获取到的是一个热流，如果不关闭的话会对整个域进行阻塞，导致后面可能的一些逻辑代码无法调用
+            // 也就是：dataStore.data 获取对应 key 如果在后面不使用 take(1)，那么其他地方如果对 dataStore.data 对应的 key
+            // 进行数据修改的时候，对应的订阅者收到的数据也会更新，而使用了take(1)对应的订阅者收到的数据不会被更新。
+            .take(1)
     }
 
     /**
@@ -69,13 +71,13 @@ open class BaseRepository {
      */
     inline fun <reified T> load(
         saveKey: String,
-        crossinline netRequest: suspend () -> T
+        crossinline netRequest: suspend () -> T,
     ): Flow<T> {
         return flow {
             loadLocalData<T>(saveKey).collect { result ->
                 if (result == null) {
                     val netResult = netRequest()
-                    saveData(saveKey, Json.encodeToString(netResult))
+//                    saveData(saveKey, Json.encodeToString(netResult))
                     emit(netResult)
                 } else {
                     emit(result as T)

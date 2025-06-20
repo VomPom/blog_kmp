@@ -13,6 +13,7 @@ androidx-testExt = "1.2.1"
 coil = "3.2.0"
 composeHotReload = "1.0.0-alpha09"
 composeMultiplatform = "1.8.0"
+composeWebviewMultiplatform = "2.0.0"
 datastorePreferences = "1.1.7"
 junit = "4.13.2"
 kotlin = "2.1.21"
@@ -26,6 +27,7 @@ navigationCompose = "2.9.0-beta01"
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }

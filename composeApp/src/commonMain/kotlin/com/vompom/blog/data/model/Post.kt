@@ -38,6 +38,13 @@ data class PostResponse(
 )
 
 @Serializable
+data class SearchResponse(
+    val api: String = "",
+    val `data`: List<Post> = emptyList(),
+)
+
+
+@Serializable
 data class PostSummaryList(
     val index: Int = 0,
     val info: Info? = null,

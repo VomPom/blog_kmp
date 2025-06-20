@@ -3,6 +3,7 @@ package com.vompom.blog.data.api
 import com.vompom.AppConfig
 import com.vompom.blog.data.model.PageResponse
 import com.vompom.blog.data.model.PostResponse
+import com.vompom.blog.data.model.SearchResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -15,14 +16,13 @@ import io.ktor.utils.io.*
  */
 
 interface PostApi {
-    suspend fun getAllPostPages(): PageResponse?
+    suspend fun getAllPost(): SearchResponse?
     suspend fun getPostPage(api: String): PageResponse?
     suspend fun getPosts(api: String): PostResponse?
 }
 
 class PostApiImpl(private val client: HttpClient) : PostApi {
-
-    override suspend fun getAllPostPages(): PageResponse? = request<PageResponse>(getUrl("api/posts.json"))
+    override suspend fun getAllPost(): SearchResponse? = request<SearchResponse>(getUrl("api/search.json"))
 
     override suspend fun getPostPage(api: String): PageResponse? = request<PageResponse>(getUrl(api))
 

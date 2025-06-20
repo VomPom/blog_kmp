@@ -42,17 +42,18 @@ fun HomeScreen(navController: NavHostController) {
         ) { page ->
             when (craneScreenValues[page]) {
                 HomeScreenType.Post -> {
-                    PostScreen()
+                    PostScreen(
+                        onPostClick = { post -> navigationActions.goToPostDetail(post) },
+                        onTagClicked = { tag -> navigationActions.goToPostType(tag) },
+                        onCategoryClicked = { category -> navigationActions.goToPostType(category) }
+                    )
                 }
 
                 HomeScreenType.Stats -> {
                     StatsScreen(
-                        onTagClicked = { tag ->
-                            navigationActions.goToPostType(tag)
-                        },
-                        onCategoryClicked = { category ->
-                            navigationActions.goToPostType(category)
-                        })
+                        onTagClicked = { tag -> navigationActions.goToPostType(tag) },
+                        onCategoryClicked = { category -> navigationActions.goToPostType(category) }
+                    )
                 }
 
                 HomeScreenType.Mine -> {

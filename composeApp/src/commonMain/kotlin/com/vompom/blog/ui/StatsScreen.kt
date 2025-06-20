@@ -8,6 +8,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vompom.blog.data.model.Category
+import com.vompom.blog.data.model.Post
 import com.vompom.blog.data.model.Tag
 import com.vompom.blog.ui.component.CategoryItem
 import com.vompom.blog.ui.component.ContentContainer
@@ -41,6 +43,9 @@ fun StatsScreen(
     val categoryList by viewModel.loadCategories().collectAsStateWithLifecycle(emptyList())
     val tags by viewModel.loadTags().collectAsStateWithLifecycle(emptyList())
 
+    LaunchedEffect(Unit) {
+
+    }
     ScreenContainer("统计", Icons.Filled.Refresh) {
         Summary(tags, categoryList)
 
@@ -179,6 +184,7 @@ fun StatsLabel(
     }
 }
 
+typealias OnPostClick = (Post) -> Unit
 typealias OnCategoryClicked = (Category) -> Unit
 typealias OnTagClicked = (Tag) -> Unit
 

@@ -2,6 +2,7 @@ package com.vompom.blog.navigation
 
 import androidx.navigation.NavHostController
 import com.vompom.blog.data.model.Category
+import com.vompom.blog.data.model.Post
 import com.vompom.blog.data.model.Tag
 
 /**
@@ -22,5 +23,7 @@ class NavigationActions(navController: NavHostController) {
         navController.navigate(Routes.Debug())
     }
 
-    val goToPostDetail: (Routes.PostDetail) -> Unit = { it -> navController.navigate(it) }
+    val goToPostDetail: (Post) -> Unit = { it ->
+        navController.navigate(Routes.PostDetail(title = it.title, it.url))
+    }
 }

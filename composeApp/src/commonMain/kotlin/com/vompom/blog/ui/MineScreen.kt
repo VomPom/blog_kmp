@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.vompom.blog.data.Config
+import com.vompom.AppConfig
 import com.vompom.blog.platform.AppInstallInfo
 import com.vompom.blog.ui.component.ContentContainer
 import com.vompom.blog.ui.component.ScreenContainer
@@ -57,15 +57,15 @@ fun Info() {
                 )
                 .clip(CircleShape)
                 .clickable { },
-            model = Config.AVATAR,
-            contentDescription = Config.AVATAR,
+            model = AppConfig.AVATAR,
+            contentDescription = AppConfig.AVATAR,
         )
         Column(
             modifier = Modifier.wrapContentSize().padding(start = 10.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(Config.BLOG_NAME, style = TextStyle(fontSize = 18.sp))
-            Text(Config.BLOG_DESC, style = TextStyle(fontSize = 10.sp, color = MaterialTheme.colorScheme.outline))
+            Text(AppConfig.BLOG_NAME, style = TextStyle(fontSize = 18.sp))
+            Text(AppConfig.BLOG_DESC, style = TextStyle(fontSize = 10.sp, color = MaterialTheme.colorScheme.outline))
         }
     }
 }
@@ -83,7 +83,7 @@ fun About() {
     // 在 Compose 中启动一个协程来获取版本号
     ContentContainer("关于", 15.sp, FontWeight.Bold) {
         Column {
-            InfoItem("应用名称", Config.BLOG_NAME)
+            InfoItem("应用名称", AppConfig.BLOG_NAME)
             InfoItem("应用版本", appInfo.getAppVersion())
             InfoItem("安装时间", TimeUtils.timeFormat(appInfo.getInstallTime()))
             InfoItem("更新时间", TimeUtils.timeFormat(appInfo.getUpdateTime()))

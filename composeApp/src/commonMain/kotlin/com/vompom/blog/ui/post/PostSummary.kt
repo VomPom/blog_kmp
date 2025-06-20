@@ -18,6 +18,10 @@ import androidx.compose.ui.unit.sp
 import com.vompom.blog.data.model.Category
 import com.vompom.blog.data.model.Post
 import com.vompom.blog.data.model.Tag
+import com.vompom.blog.ui.OnCategoryClicked
+import com.vompom.blog.ui.OnPostClick
+import com.vompom.blog.ui.OnTagClicked
+import com.vompom.blog.ui.utils.formatDate
 
 /**
  *
@@ -26,8 +30,7 @@ import com.vompom.blog.data.model.Tag
  * @Description
  */
 enum class PostItemScene {
-    DEFAULT,
-    CHARACTER,
+    DEFAULT, CHARACTER,
 }
 
 @Composable
@@ -35,7 +38,9 @@ fun PostSummary(
     data: Post,
     index: Int,
     scene: PostItemScene = PostItemScene.DEFAULT,
-    onPostClick: () -> Unit = {},
+    onPostClick: OnPostClick = {},
+    onTagClicked: OnTagClicked = {},
+    onCategoryClicked: OnCategoryClicked = {},
 ) {
     Box(
         modifier = Modifier
@@ -45,21 +50,20 @@ fun PostSummary(
             .border(1.dp, Color.Gray, RoundedCornerShape(5.dp))
             .background(Color(0xFFF5F5F5)) // 对应 app.color.content_bg
             .padding(5.dp)
-            .clickable(onClick = { onPostClick() })
+            .clickable(onClick = { onPostClick(data) })
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.Start
+            modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start
         ) {
             Title(scene, data.title, index)
             Spacer(Modifier.height(3.dp))
 
             if (scene == PostItemScene.DEFAULT) {
-                TimeAndCategories(index, data.date, data.categories)
+                TimeAndCategories(index, data.date, data.categories, onCategoryClicked)
                 Spacer(Modifier.height(5.dp))
                 Summary(data.content)
                 Spacer(Modifier.height(5.dp))
-                Tags(data.tags)
+                Tags(data.tags, onTagClicked)
             }
         }
     }
@@ -87,7 +91,12 @@ private fun Title(scene: PostItemScene, title: String, index: Int) {
 }
 
 @Composable
-private fun TimeAndCategories(index: Int, date: String, categories: List<Category>) {
+private fun TimeAndCategories(
+    index: Int,
+    date: String,
+    categories: List<Category>,
+    onCategoryClicked: OnCategoryClicked,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -108,7 +117,7 @@ private fun TimeAndCategories(index: Int, date: String, categories: List<Categor
 
         // 日期
         Text(
-            text = "formatDate(date)",
+            text = formatDate(date),
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
             color = Color(0xFF888888) // 对应 app.color.post_time
@@ -117,14 +126,14 @@ private fun TimeAndCategories(index: Int, date: String, categories: List<Categor
         // 分类
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             categories.forEach { category ->
-                CategoryItem(category)
+                CategoryItem(category, onCategoryClicked)
             }
         }
     }
 }
 
 @Composable
-private fun CategoryItem(category: Category) {
+private fun CategoryItem(category: Category, onCategoryClicked: OnCategoryClicked) {
     Text(
         text = category.name,
         fontSize = 12.sp,
@@ -132,6 +141,7 @@ private fun CategoryItem(category: Category) {
             .padding(horizontal = 6.dp, vertical = 2.dp)
             .background(Color.LightGray, RoundedCornerShape(4.dp))
             .padding(horizontal = 4.dp)
+            .clickable(onClick = { onCategoryClicked(category) }),
     )
 }
 
@@ -151,19 +161,19 @@ private fun Summary(content: String) {
 }
 
 @Composable
-private fun Tags(tags: List<Tag>) {
+private fun Tags(tags: List<Tag>, onTagClicked: OnTagClicked) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier.padding(bottom = 5.dp)
     ) {
         tags.forEach { tag ->
-            TagItem(tag)
+            TagItem(tag, onTagClicked)
         }
     }
 }
 
 @Composable
-private fun TagItem(tag: Tag) {
+private fun TagItem(tag: Tag, onTagClicked: OnTagClicked) {
     Text(
         text = tag.name,
         fontSize = 12.sp,
@@ -171,16 +181,6 @@ private fun TagItem(tag: Tag) {
             .padding(horizontal = 6.dp, vertical = 2.dp)
             .background(Color(0xFFE0E0E0), RoundedCornerShape(4.dp))
             .padding(horizontal = 4.dp)
+            .clickable(onClick = { onTagClicked(tag) })
     )
 }
-
-//private fun formatDate(isoDate: String): String {
-//    return try {
-//        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-//        val date = inputFormat.parse(isoDate)
-//        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-//        outputFormat.format(date ?: Date())
-//    } catch (e: Exception) {
-//        isoDate
-//    }
-//}
