@@ -3,9 +3,9 @@ package com.vompom.blog.viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vompom.blog.data.model.ListDataState
 import com.vompom.blog.data.model.Page
 import com.vompom.blog.data.model.Post
-import com.vompom.blog.data.model.PostUiState
 import com.vompom.blog.data.repository.PostRepository
 import com.vompom.blog.ui.component.Paginator
 import com.vompom.blog.ui.component.UiState
@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.*
 
 class PostViewModel(private val repository: PostRepository) : ViewModel() {
     var pageApi: String = ""
-    private val _uiState = MutableStateFlow(PostUiState())
-    val uiState: StateFlow<PostUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(ListDataState<Post>())
+    val uiState: StateFlow<ListDataState<Post>> = _uiState.asStateFlow()
     private val _pages = mutableStateListOf<Page>()
     private var _maxPage = 0
 
@@ -30,7 +30,6 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
         initialKey = 1,
         incrementBy = 1,
         onLoadUpdated = { isLoading ->
-            println("onLoadUpdated:$isLoading}")
             _uiState.update {
                 it.copy(isLoading = isLoading)
             }
@@ -44,7 +43,7 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
         onSuccess = { items, _ ->
             _uiState.update { currentState ->
                 currentState.copy(
-                    posts = currentState.posts + items
+                    data = currentState.data + items
                 )
             }
         }

@@ -7,8 +7,9 @@ package com.vompom.blog.data.model
  * @Description
  */
 
-data class PostUiState(
-    val posts: List<Post> = emptyList(),
+data class ListDataState<T>(
+    val data: List<T> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
 )
+

@@ -51,10 +51,10 @@ fun PostScreen(
             errorMessage = uiState.errorMessage,
         ) {
             LazyColumn(state = listState) {
-                items(uiState.posts.size) { index ->
+                items(uiState.data.size) { index ->
                     PostSummary(
-                        uiState.posts[index],
-                        index,
+                        uiState.data[index],
+                        index + 1,
                         scene = PostItemScene.DEFAULT,
                         onPostClick,
                         onTagClicked,

@@ -3,27 +3,28 @@ package com.vompom.blog.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Downloading
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vompom.blog.data.model.Category
-import com.vompom.blog.data.model.Post
-import com.vompom.blog.data.model.Tag
+import com.vompom.blog.data.model.*
 import com.vompom.blog.ui.component.CategoryItem
 import com.vompom.blog.ui.component.ContentContainer
 import com.vompom.blog.ui.component.ScreenContainer
 import com.vompom.blog.ui.component.TagItem
 import com.vompom.blog.ui.utils.PreviewWrapper
+import com.vompom.blog.utils.calLetters
 import com.vompom.blog.viewmodel.StatsViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -40,36 +41,41 @@ fun StatsScreen(
     onCategoryClicked: OnCategoryClicked,
 ) {
     val viewModel = koinViewModel<StatsViewModel>()
-    val categoryList by viewModel.loadCategories().collectAsStateWithLifecycle(emptyList())
-    val tags by viewModel.loadTags().collectAsStateWithLifecycle(emptyList())
+    val tagsState by viewModel.tagsState.collectAsState()
+    val categoriesState by viewModel.categoriesState.collectAsState()
+    val postsState by viewModel.postsState.collectAsState()
+
 
     LaunchedEffect(Unit) {
-
+        viewModel.loadData()
     }
     ScreenContainer("统计", Icons.Filled.Refresh) {
-        Summary(tags, categoryList)
+        Summary(postsState, tagsState, categoriesState)
 
         ContentContainer("#分类") {
-            Categories(categoryList, onCategoryClicked)
+            Categories(categoriesState, onCategoryClicked)
         }
         ContentContainer("#标签") {
-            Tags(tags, onTagClicked)
+            Tags(tagsState, onTagClicked)
         }
     }
 }
 
 
 @Composable
-fun Summary(tags: List<Tag>, categories: List<Category>) {
+fun Summary(
+    allPostUiState: ListDataState<PostV2>,
+    tagUiState: ListDataState<Tag>,
+    categoryUiState: ListDataState<Category>,
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        // 文章统计
         StatsLabel(
-            count = 0, // postPage.count,
+            count = allPostUiState.data.size,
             label = "篇",
-//            state = loadState,
+            isLoading = allPostUiState.isLoading,
             onClick = {
 //                onNavigateToPostList(allPosts, PostItemScene.ALL_POST)
             }
@@ -77,49 +83,46 @@ fun Summary(tags: List<Tag>, categories: List<Category>) {
 
         // 字数统计
         StatsLabel(
-            count = 0, //calLetters(allPosts),
+            count = calLetters(allPostUiState.data),
             label = "字数",
-//            state = LoadState.SUCCESS, // 假设字数不需要加载状态
+            isLoading = allPostUiState.isLoading, // 假设字数不需要加载状态
             onClick = {
-//                val sortedData = allPosts.sortedByDescending { calLetter(it) }
+//                val sortedData = allPostUiState.data.sortedByDescending { calLetter(it) }
 //                onNavigateToSortedPosts(sortedData)
             }
         )
 
         // 分类统计
         StatsLabel(
-            count = categories.size,
+            count = categoryUiState.data.size,
             label = "分类",
-//            state = loadState,
+            isLoading = categoryUiState.isLoading,
             onClick = { }
         )
 
         // 标签统计
         StatsLabel(
-            count = tags.size,
+            count = tagUiState.data.size,
             label = "标签",
-//            state = loadState,
+            isLoading = tagUiState.isLoading,
             onClick = { }
         )
     }
 }
 
 @Composable
-fun Tags(tags: List<Tag>, onTagClicked: OnTagClicked) {
+fun Tags(state: ListDataState<Tag>, onTagClicked: OnTagClicked) {
     StatsFlowRow {
-        tags.forEach { tag ->
-            TagItem(tag, true) {
-                println("onclick item:$tag")
-                onTagClicked(tag)
-            }
+        state.data.forEach { tag ->
+            TagItem(tag, true, onTagClicked)
         }
     }
 }
 
 @Composable
-fun Categories(categoryList: List<Category>, onCategoryClicked: OnCategoryClicked) {
+fun Categories(state: ListDataState<Category>, onCategoryClicked: OnCategoryClicked) {
     StatsFlowRow {
-        categoryList.forEach { item ->
+        state.data.forEach { item ->
             CategoryItem(item) {
                 println("onclick item:$item")
                 onCategoryClicked(item)
@@ -145,6 +148,7 @@ fun StatsFlowRow(content: @Composable FlowRowScope.() -> Unit) {
 fun StatsLabel(
     count: Int,
     label: String,
+    isLoading: Boolean,
     onClick: () -> Unit = {},
 ) {
     Column(
@@ -157,23 +161,18 @@ fun StatsLabel(
             modifier = Modifier.height(15.dp),
             contentAlignment = Alignment.Center
         ) {
-//            when (state) {
-//                LoadState.LOADING -> {
-//                    Icon(
-//                        painter = painterResource(id = R.drawable.ic_refresh),
-//                        contentDescription = "Loading",
-//                        modifier = Modifier.size(15.dp),
-//                        tint = MaterialTheme.colors.onBackground
-//                    )
-//                }
-
-//                else -> {
-            Text(
-                text = count.toString(),
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 15.sp
-            )
-
+            if (isLoading) {
+                Icon(
+                    imageVector = Icons.Default.Downloading,
+                    contentDescription = "Loading"
+                )
+            } else {
+                Text(
+                    text = count.toString(),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 15.sp
+                )
+            }
         }
         Text(
             text = label,

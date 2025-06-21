@@ -54,7 +54,6 @@ class Paginator<T>(
                         is UiState.Loading -> Unit
                         is UiState.Success -> {
                             val items = result.data.orEmpty()
-                            println("UiState.Success:items = ${items.size}")
                             val nextKey = currentKey + incrementBy
                             onSuccess(items, nextKey)
                             currentKey = nextKey

@@ -1,10 +1,14 @@
 package com.vompom.blog.ui.post
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewState
 import com.vompom.AppConfig
@@ -22,21 +26,24 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun PostDetailScreen(data: Routes.PostDetail) {
     val viewModel = koinViewModel<PostViewModel>()
-    val uiState by viewModel.uiState.collectAsState()
 
     val state = rememberWebViewState("${AppConfig.BASE_URL}/${data.url}")
     Scaffold(
         modifier = Modifier
     ) { paddingValues ->
         ScreenContainer(data.title, withBackIcon = true, paddingValues = paddingValues) {
-//            ContentColumn(
-//                modifier = Modifier.fillMaxSize(),
-//                loading = uiState.isLoading,
-//                errorMessage = uiState.errorMessage,
-//            ) {
-//                WebView(state)
-//            }
-            WebView(state)
+            Box(
+                Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                WebView(
+                    state = state,
+                    modifier = Modifier.fillMaxSize()
+                )
+                if (state.isLoading) {
+                    Text(text = "Loading...", style = TextStyle(fontSize = 20.sp))
+                }
+            }
         }
     }
 }

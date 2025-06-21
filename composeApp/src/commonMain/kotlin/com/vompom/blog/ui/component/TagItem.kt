@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,8 +20,8 @@ import androidx.compose.ui.unit.sp
 import blog_kmp.composeapp.generated.resources.Res
 import blog_kmp.composeapp.generated.resources.ic_post_tag
 import com.vompom.blog.data.model.Tag
+import com.vompom.blog.ui.OnTagClicked
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Created by @juliswang on 2025/05/28 20:42
@@ -31,13 +32,13 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun TagItem(
     data: Tag,
     showCount: Boolean = false,
-    onClick: () -> Unit = {}
+    onTagClicked: OnTagClicked,
 ) {
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(5.dp))
-            .background(Color(0xFFF5F5F5))
-            .clickable(onClick = onClick)
+            .background(MaterialTheme.colorScheme.surfaceTint)
+            .clickable(onClick = { onTagClicked(data) })
             .padding(end = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
@@ -62,13 +63,4 @@ fun TagItem(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun TagItemPreview() {
-    TagItem(
-        data = Tag(name = "Android", count = 42, api = "api", slug = "android"),
-        showCount = true
-    )
 }

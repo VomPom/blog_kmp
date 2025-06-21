@@ -77,6 +77,7 @@ open class BaseRepository {
             loadLocalData<T>(saveKey).collect { result ->
                 if (result == null) {
                     val netResult = netRequest()
+                    // todo:: optimize ...
 //                    saveData(saveKey, Json.encodeToString(netResult))
                     emit(netResult)
                 } else {

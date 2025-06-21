@@ -41,10 +41,10 @@ fun PostTypeScreen(postType: Routes.PostType, onPostClick: OnPostClick = {}) {
                 errorMessage = uiState.errorMessage,
             ) {
                 LazyColumn(state = listState) {
-                    items(uiState.posts.size) { index ->
+                    items(uiState.data.size) { index ->
                         PostSummary(
-                            data = uiState.posts[index],
-                            index = index,
+                            data = uiState.data[index],
+                            index = index + 1,
                             scene = PostItemScene.DEFAULT,
                             onPostClick = onPostClick
                         )

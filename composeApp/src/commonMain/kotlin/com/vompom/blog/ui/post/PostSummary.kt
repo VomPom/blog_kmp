@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +22,7 @@ import com.vompom.blog.data.model.Tag
 import com.vompom.blog.ui.OnCategoryClicked
 import com.vompom.blog.ui.OnPostClick
 import com.vompom.blog.ui.OnTagClicked
+import com.vompom.blog.ui.component.TagItem
 import com.vompom.blog.ui.utils.formatDate
 
 /**
@@ -45,10 +47,10 @@ fun PostSummary(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(horizontal = 2.dp, vertical = 4.dp)
             .shadow(elevation = 1.dp, shape = RoundedCornerShape(5.dp))
-            .border(1.dp, Color.Gray, RoundedCornerShape(5.dp))
-            .background(Color(0xFFF5F5F5)) // 对应 app.color.content_bg
+            .border(0.dp, Color.Gray, RoundedCornerShape(5.dp))
+            .background(MaterialTheme.colorScheme.onSecondary)
             .padding(5.dp)
             .clickable(onClick = { onPostClick(data) })
     ) {
@@ -101,12 +103,14 @@ private fun TimeAndCategories(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        // 索引标签
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(22.dp, 12.dp)
-                .background(Color(0xFFE0E0E0), RoundedCornerShape(5.dp)) // 对应 app.color.tag_bg
+                .background(
+                    MaterialTheme.colorScheme.background,
+                    RoundedCornerShape(5.dp)
+                )
         ) {
             Text(
                 text = "[$index]",
@@ -115,7 +119,6 @@ private fun TimeAndCategories(
             )
         }
 
-        // 日期
         Text(
             text = formatDate(date),
             fontSize = 12.sp,
@@ -139,7 +142,7 @@ private fun CategoryItem(category: Category, onCategoryClicked: OnCategoryClicke
         fontSize = 12.sp,
         modifier = Modifier
             .padding(horizontal = 6.dp, vertical = 2.dp)
-            .background(Color.LightGray, RoundedCornerShape(4.dp))
+            .background(MaterialTheme.colorScheme.surfaceTint, RoundedCornerShape(4.dp))
             .padding(horizontal = 4.dp)
             .clickable(onClick = { onCategoryClicked(category) }),
     )
@@ -167,20 +170,7 @@ private fun Tags(tags: List<Tag>, onTagClicked: OnTagClicked) {
         modifier = Modifier.padding(bottom = 5.dp)
     ) {
         tags.forEach { tag ->
-            TagItem(tag, onTagClicked)
+            TagItem(tag, false, onTagClicked)
         }
     }
-}
-
-@Composable
-private fun TagItem(tag: Tag, onTagClicked: OnTagClicked) {
-    Text(
-        text = tag.name,
-        fontSize = 12.sp,
-        modifier = Modifier
-            .padding(horizontal = 6.dp, vertical = 2.dp)
-            .background(Color(0xFFE0E0E0), RoundedCornerShape(4.dp))
-            .padding(horizontal = 4.dp)
-            .clickable(onClick = { onTagClicked(tag) })
-    )
 }

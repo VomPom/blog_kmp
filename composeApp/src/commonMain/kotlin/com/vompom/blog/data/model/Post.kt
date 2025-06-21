@@ -40,7 +40,7 @@ data class PostResponse(
 @Serializable
 data class SearchResponse(
     val api: String = "",
-    val `data`: List<Post> = emptyList(),
+    val `data`: List<PostV2> = emptyList(),
 )
 
 
@@ -64,6 +64,23 @@ data class Post(
     val images: List<String> = emptyList(),
     val slug: String = "",
     val tags: List<Tag> = emptyList(),
+    val title: String = "",
+    val updated: String = "",
+    val url: String = "",
+)
+
+@Serializable
+data class PostV2(
+    val api: String = "",
+    val comments: Boolean = false,
+    val content: String = "",
+    val cover: String? = "",
+    val date: String = "",
+    val excerpt: String = "",
+    val images: List<String> = emptyList(),
+    val categories: List<String> = emptyList(),
+    val slug: String = "",
+    val tags: List<String> = emptyList(),
     val title: String = "",
     val updated: String = "",
     val url: String = "",
