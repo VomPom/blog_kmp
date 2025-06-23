@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import blog_kmp.composeapp.generated.resources.Res
 import blog_kmp.composeapp.generated.resources.ic_post_tag
 import com.vompom.blog.data.model.Tag
-import com.vompom.blog.ui.OnTagClicked
+import com.vompom.blog.ui.OnTagClick
 import org.jetbrains.compose.resources.painterResource
 
 /**
@@ -32,13 +32,13 @@ import org.jetbrains.compose.resources.painterResource
 fun TagItem(
     data: Tag,
     showCount: Boolean = false,
-    onTagClicked: OnTagClicked,
+    onTagClick: OnTagClick,
 ) {
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(5.dp))
             .background(MaterialTheme.colorScheme.surfaceTint)
-            .clickable(onClick = { onTagClicked(data) })
+            .clickable(onClick = { onTagClick(data) })
             .padding(end = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start

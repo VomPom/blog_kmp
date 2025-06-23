@@ -79,11 +79,6 @@ fun OnPagination(
 ) {
     val shouldLoadMore = remember {
         derivedStateOf {
-            if (listState.layoutInfo.visibleItemsInfo.isNotEmpty()) {
-                println("listState.layoutInfo.totalItemsCount:${listState.layoutInfo.totalItemsCount}")
-                println(" listState.layoutInfo.visibleItemsInfo.last().index:${listState.layoutInfo.visibleItemsInfo.last().index}")
-            }
-
             listState.layoutInfo.visibleItemsInfo.isNotEmpty() &&
                     listState.layoutInfo.visibleItemsInfo.last().index >= listState.layoutInfo.totalItemsCount - 3
         }
@@ -93,7 +88,6 @@ fun OnPagination(
         if (shouldLoadMore.value) {
             onLoadMore()
         }
-        println("shouldLoadMore.value:${shouldLoadMore.value}")
     }
 }
 

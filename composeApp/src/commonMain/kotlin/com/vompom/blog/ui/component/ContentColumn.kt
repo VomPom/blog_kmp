@@ -16,6 +16,7 @@ fun ContentColumn(
     modifier: Modifier = Modifier,
     loading: Boolean,
     errorMessage: String?,
+    onErrorOKClick: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     var errorState by remember { mutableStateOf<String?>(null) }
@@ -43,6 +44,7 @@ fun ContentColumn(
     // Show Error Alert Dialog
     errorState?.let {
         ErrorAlert(errorMessage = it) {
+            onErrorOKClick()
             // Clear the error state when the "OK" button is clicked
             errorState = null
         }

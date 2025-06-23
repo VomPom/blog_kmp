@@ -24,7 +24,6 @@ import com.vompom.blog.ui.component.ContentContainer
 import com.vompom.blog.ui.component.ScreenContainer
 import com.vompom.blog.ui.component.TagItem
 import com.vompom.blog.ui.utils.PreviewWrapper
-import com.vompom.blog.utils.calLetters
 import com.vompom.blog.viewmodel.StatsViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -37,26 +36,33 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsScreen(
-    onTagClicked: OnTagClicked,
-    onCategoryClicked: OnCategoryClicked,
+    onBackClick: OnBackClick,
+    onTagClick: OnTagClick,
+    onCategoryClick: OnCategoryClick,
+    onStatsClick: OnStatsClick,
 ) {
     val viewModel = koinViewModel<StatsViewModel>()
     val tagsState by viewModel.tagsState.collectAsState()
     val categoriesState by viewModel.categoriesState.collectAsState()
     val postsState by viewModel.postsState.collectAsState()
-
+    val letterCntState by viewModel.letterCntState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadData()
     }
-    ScreenContainer("统计", Icons.Filled.Refresh) {
-        Summary(postsState, tagsState, categoriesState)
-
+    ScreenContainer("统计", onBackClick, Icons.Filled.Refresh) {
+        Summary(
+            onStatsClick,
+            postsState,
+            tagsState,
+            categoriesState,
+            letterCntState
+        )
         ContentContainer("#分类") {
-            Categories(categoriesState, onCategoryClicked)
+            Categories(categoriesState, onCategoryClick)
         }
         ContentContainer("#标签") {
-            Tags(tagsState, onTagClicked)
+            Tags(tagsState, onTagClick)
         }
     }
 }
@@ -64,9 +70,11 @@ fun StatsScreen(
 
 @Composable
 fun Summary(
+    onStatsClick: OnStatsClick,
     allPostUiState: ListDataState<PostV2>,
     tagUiState: ListDataState<Tag>,
     categoryUiState: ListDataState<Category>,
+    letterCntState: Int,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -77,18 +85,21 @@ fun Summary(
             label = "篇",
             isLoading = allPostUiState.isLoading,
             onClick = {
-//                onNavigateToPostList(allPosts, PostItemScene.ALL_POST)
+                if (allPostUiState.data.isNotEmpty()) {
+                    onStatsClick(StatsScene.ALL_POST)
+                }
             }
         )
 
         // 字数统计
         StatsLabel(
-            count = calLetters(allPostUiState.data),
+            count = letterCntState,
             label = "字数",
             isLoading = allPostUiState.isLoading, // 假设字数不需要加载状态
             onClick = {
-//                val sortedData = allPostUiState.data.sortedByDescending { calLetter(it) }
-//                onNavigateToSortedPosts(sortedData)
+                if (allPostUiState.data.isNotEmpty()) {
+                    onStatsClick(StatsScene.CHARACTER)
+                }
             }
         )
 
@@ -111,21 +122,21 @@ fun Summary(
 }
 
 @Composable
-fun Tags(state: ListDataState<Tag>, onTagClicked: OnTagClicked) {
+fun Tags(state: ListDataState<Tag>, onTagClick: OnTagClick) {
     StatsFlowRow {
         state.data.forEach { tag ->
-            TagItem(tag, true, onTagClicked)
+            TagItem(tag, true, onTagClick)
         }
     }
 }
 
 @Composable
-fun Categories(state: ListDataState<Category>, onCategoryClicked: OnCategoryClicked) {
+fun Categories(state: ListDataState<Category>, onCategoryClick: OnCategoryClick) {
     StatsFlowRow {
         state.data.forEach { item ->
             CategoryItem(item) {
                 println("onclick item:$item")
-                onCategoryClicked(item)
+                onCategoryClick(item)
             }
         }
     }
@@ -183,9 +194,16 @@ fun StatsLabel(
     }
 }
 
+enum class StatsScene {
+    DEFAULT,
+    ALL_POST,
+    CHARACTER,
+}
+
 typealias OnPostClick = (Post) -> Unit
-typealias OnCategoryClicked = (Category) -> Unit
-typealias OnTagClicked = (Tag) -> Unit
+typealias OnCategoryClick = (Category) -> Unit
+typealias OnTagClick = (Tag) -> Unit
+typealias OnStatsClick = (StatsScene) -> Unit
 
 @Preview()
 @Composable

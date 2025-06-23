@@ -10,9 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.vompom.blog.ui.OnCategoryClicked
-import com.vompom.blog.ui.OnPostClick
-import com.vompom.blog.ui.OnTagClicked
+import com.vompom.blog.ui.*
 import com.vompom.blog.ui.component.ContentColumn
 import com.vompom.blog.ui.component.OnPagination
 import com.vompom.blog.ui.component.ScreenContainer
@@ -26,9 +24,10 @@ import org.koin.compose.viewmodel.koinViewModel
  */
 @Composable
 fun PostScreen(
+    onBackClick: OnBackClick,
     onPostClick: OnPostClick,
-    onTagClicked: OnTagClicked,
-    onCategoryClicked: OnCategoryClicked,
+    onTagClick: OnTagClick,
+    onCategoryClick: OnCategoryClick,
 ) {
     val viewModel = koinViewModel<PostViewModel>()
     val uiState by viewModel.uiState.collectAsState()
@@ -40,6 +39,7 @@ fun PostScreen(
 
     ScreenContainer(
         "博客文章(刚刚更新)",
+        onBackClick,
         withBackIcon = false,
         icon = Icons.Rounded.Refresh,
         action = {
@@ -55,10 +55,10 @@ fun PostScreen(
                     PostSummary(
                         uiState.data[index],
                         index + 1,
-                        scene = PostItemScene.DEFAULT,
+                        scene = StatsScene.DEFAULT,
                         onPostClick,
-                        onTagClicked,
-                        onCategoryClicked
+                        onTagClick,
+                        onCategoryClick
                     )
                 }
             }

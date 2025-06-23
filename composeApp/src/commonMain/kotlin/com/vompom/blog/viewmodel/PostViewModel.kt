@@ -6,11 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.vompom.blog.data.model.ListDataState
 import com.vompom.blog.data.model.Page
 import com.vompom.blog.data.model.Post
+import com.vompom.blog.data.model.PostV2
 import com.vompom.blog.data.repository.PostRepository
 import com.vompom.blog.ui.component.Paginator
 import com.vompom.blog.ui.component.UiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 /**
  * Created by @juliswang on 2025/05/27 20:18
@@ -22,6 +24,13 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
     var pageApi: String = ""
     private val _uiState = MutableStateFlow(ListDataState<Post>())
     val uiState: StateFlow<ListDataState<Post>> = _uiState.asStateFlow()
+
+    // PostV2's tags and category are different with Post so....
+    // fixme: use same api...
+    private val _postsState = MutableStateFlow(ListDataState<PostV2>())
+    val postsState: StateFlow<ListDataState<PostV2>> = _postsState.asStateFlow()
+
+
     private val _pages = mutableStateListOf<Page>()
     private var _maxPage = 0
 
@@ -65,7 +74,11 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
         return flow {
             val api = _pages[index].api
             repository.getPosts(api).collect {
-                emit(it.data.posts!!)
+                if (it.data == null || it.data.posts.isNullOrEmpty()) {
+                    emit(emptyList())
+                } else {
+                    emit(it.data.posts)
+                }
             }
         }
     }
@@ -86,11 +99,28 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
                         realLoadPosts(0)
                     }
                     .collect { posts ->
-                        emit(UiState.Success(posts)) // 最终数据
+                        if (posts.isNotEmpty()) {
+                            emit(UiState.Success(posts))
+                        } else {
+                            emit(UiState.Error(Exception("Failed to load items, data is empty.")))
+                        }
                     }
             } else {
                 realLoadPosts(index).collect { posts ->
                     emit(UiState.Success(posts))
+                }
+            }
+        }
+    }
+
+    fun loadAllPostSummary() {
+        viewModelScope.launch {
+            repository.loadAllPost().collect { result ->
+                _postsState.update {
+                    it.copy(isLoading = true)
+                }
+                _postsState.update {
+                    it.copy(isLoading = false, data = result)
                 }
             }
         }

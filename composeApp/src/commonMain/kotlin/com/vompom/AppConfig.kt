@@ -11,5 +11,7 @@ object AppConfig {
     const val BLOG_URL = BASE_URL
     const val AVATAR = "$BASE_URL/img/avatar.png"
     const val BLOG_NAME = "落叶挽歌"
+
+    const val AUTHOR = "juliswang"
     const val BLOG_DESC = "juliswang's 博客"
 }

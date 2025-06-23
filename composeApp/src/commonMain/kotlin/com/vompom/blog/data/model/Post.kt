@@ -34,7 +34,7 @@ data class Page(
 @Serializable
 data class PostResponse(
     val api: String = "",
-    val `data`: PostSummaryList = PostSummaryList(),
+    val `data`: PostSummaryList ? = null ,
 )
 
 @Serializable

@@ -5,7 +5,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.vompom.blog.navigation.NavigationActions
@@ -22,14 +21,9 @@ enum class HomeScreenType {
 }
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, navigationActions: NavigationActions) {
     val craneScreenValues = HomeScreenType.entries.toTypedArray()
     val pagerState = rememberPagerState(initialPage = HomeScreenType.Post.ordinal) { craneScreenValues.size }
-
-    val navigationActions = remember(navController) {
-        NavigationActions(navController)
-    }
-
     Scaffold(
         modifier = Modifier
     ) { contentPadding ->
@@ -43,25 +37,31 @@ fun HomeScreen(navController: NavHostController) {
             when (craneScreenValues[page]) {
                 HomeScreenType.Post -> {
                     PostScreen(
+                        onBackClick = { navController.popBackStack() },
                         onPostClick = { post -> navigationActions.goToPostDetail(post) },
-                        onTagClicked = { tag -> navigationActions.goToPostType(tag) },
-                        onCategoryClicked = { category -> navigationActions.goToPostType(category) }
+                        onTagClick = { tag -> navigationActions.goToPostType(tag) },
+                        onCategoryClick = { category -> navigationActions.goToPostType(category) }
                     )
                 }
 
                 HomeScreenType.Stats -> {
                     StatsScreen(
-                        onTagClicked = { tag -> navigationActions.goToPostType(tag) },
-                        onCategoryClicked = { category -> navigationActions.goToPostType(category) }
+                        onBackClick = { navController.popBackStack() },
+                        onTagClick = { tag -> navigationActions.goToPostType(tag) },
+                        onCategoryClick = { category -> navigationActions.goToPostType(category) },
+                        onStatsClick = { scene -> navigationActions.goToPostType(scene) }
                     )
                 }
 
                 HomeScreenType.Mine -> {
-                    MineScreen(onDebugClicked = {
-                        navigationActions.gotoDebug()
-                    })
+                    MineScreen(
+                        onBackClick = { navController.popBackStack() },
+                        onDebugClicked = {
+                            navigationActions.gotoDebug()
+                        })
                 }
             }
         }
     }
 }
+typealias OnBackClick = () -> Unit

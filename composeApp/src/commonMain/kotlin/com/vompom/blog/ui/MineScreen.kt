@@ -21,7 +21,6 @@ import com.vompom.AppConfig
 import com.vompom.blog.platform.AppInstallInfo
 import com.vompom.blog.ui.component.ContentContainer
 import com.vompom.blog.ui.component.ScreenContainer
-import com.vompom.blog.ui.utils.PreviewWrapper
 import com.vompom.blog.utils.TimeUtils
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -33,8 +32,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
 @Composable
-fun MineScreen(onDebugClicked: () -> Unit) {
-    ScreenContainer("我") {
+fun MineScreen(
+    onBackClick: OnBackClick,
+    onDebugClicked: () -> Unit,
+) {
+    ScreenContainer("我", onBackClick = onBackClick) {
         Info()
         Settings(onDebugClicked)
         About()
@@ -112,13 +114,5 @@ fun InfoItem(
             text = data,
             style = TextStyle(fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface),
         )
-    }
-}
-
-@Preview
-@Composable
-fun MinePreview() {
-    PreviewWrapper {
-        MineScreen({})
     }
 }

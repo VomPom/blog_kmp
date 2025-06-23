@@ -18,12 +18,12 @@ import org.koin.compose.viewmodel.koinViewModel
  */
 
 @Composable
-fun DebugScreen(navController: NavHostController) {
+fun DebugScreen(navController: NavHostController, onBackClick: OnBackClick) {
     val postViewModel = koinViewModel<PostViewModel>()
     Scaffold(
         modifier = Modifier
     ) { paddingValues ->
-        ScreenContainer("Debug", withBackIcon = true, paddingValues = paddingValues) {
+        ScreenContainer("Debug", onBackClick, withBackIcon = true, paddingValues = paddingValues) {
             Column {
                 RequestItem("") {
 

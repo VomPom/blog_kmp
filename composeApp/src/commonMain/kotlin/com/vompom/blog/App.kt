@@ -2,11 +2,13 @@ package com.vompom.blog
 
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.vompom.blog.navigation.NavigationActions
 import com.vompom.blog.navigation.Routes
 import com.vompom.blog.ui.DebugScreen
 import com.vompom.blog.ui.HomeScreen
@@ -22,21 +24,39 @@ fun App() {
     VMTheme {
         Surface {
             val navController: NavHostController = rememberNavController()
+            val navigationActions = remember(navController) {
+                NavigationActions(navController)
+            }
+
             NavHost(navController = navController, startDestination = Routes.Home()) {
                 composable<Routes.Home> {
-                    HomeScreen(navController)
+                    HomeScreen(navController, navigationActions)
                 }
                 composable<Routes.PostType> { backStackEntry ->
                     val postType = backStackEntry.toRoute<Routes.PostType>()
-                    PostTypeScreen(postType)
+                    PostTypeScreen(
+                        postType = postType,
+                        onPostClick = { post -> navigationActions.goToPostDetail(post) },
+                        onBackClick = { navController.popBackStack() },
+                        onTagClick = { tag -> navigationActions.goToPostType(tag) },
+                        onCategoryClick = { category -> navigationActions.goToPostType(category) }
+                    )
                 }
-                
+
                 composable<Routes.PostDetail> { backStackEntry ->
                     val postDetail = backStackEntry.toRoute<Routes.PostDetail>()
-                    PostDetailScreen(postDetail)
+                    PostDetailScreen(
+                        postDetail,
+                        onBackClick = {
+                            navController.popBackStack()
+                        })
                 }
                 composable<Routes.Debug> { backStackEntry ->
-                    DebugScreen(navController)
+                    DebugScreen(
+                        navController,
+                        onBackClick = {
+                            navController.popBackStack()
+                        })
                 }
             }
         }

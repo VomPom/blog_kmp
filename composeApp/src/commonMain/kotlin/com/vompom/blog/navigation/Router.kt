@@ -1,5 +1,6 @@
 package com.vompom.blog.navigation
 
+import com.vompom.blog.ui.StatsScene
 import kotlinx.serialization.Serializable
 
 /**
@@ -11,7 +12,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 object Routes {
     @Serializable
-    class PostType(val api: String, val title: String)
+    class PostType(
+        val api: String = "",
+        val title: String = "",
+        val scene: StatsScene = StatsScene.DEFAULT,
+    ) {
+        fun isDefault(): Boolean = this.scene == StatsScene.DEFAULT
+    }
 
     @Serializable
     class PostDetail(val title: String, val url: String)

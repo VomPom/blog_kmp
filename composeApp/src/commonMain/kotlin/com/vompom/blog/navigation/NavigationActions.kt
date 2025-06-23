@@ -4,6 +4,7 @@ import androidx.navigation.NavHostController
 import com.vompom.blog.data.model.Category
 import com.vompom.blog.data.model.Post
 import com.vompom.blog.data.model.Tag
+import com.vompom.blog.ui.StatsScene
 
 /**
  *
@@ -17,8 +18,18 @@ class NavigationActions(navController: NavHostController) {
         when (it) {
             is Tag -> navController.navigate(Routes.PostType(it.api, it.name))
             is Category -> navController.navigate(Routes.PostType(it.api, it.name))
+            is StatsScene -> {
+                val title = when (it) {
+                    StatsScene.CHARACTER -> "字数统计"
+                    StatsScene.DEFAULT -> ""
+                    StatsScene.ALL_POST -> "全部文章"
+                }
+                navController.navigate(Routes.PostType(title = title, scene = it))
+            }
         }
     }
+
+
     val gotoDebug: () -> Unit = {
         navController.navigate(Routes.Debug())
     }

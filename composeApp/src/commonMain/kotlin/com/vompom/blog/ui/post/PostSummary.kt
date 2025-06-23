@@ -18,12 +18,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vompom.blog.data.model.Category
 import com.vompom.blog.data.model.Post
+import com.vompom.blog.data.model.PostV2
 import com.vompom.blog.data.model.Tag
-import com.vompom.blog.ui.OnCategoryClicked
+import com.vompom.blog.ui.OnCategoryClick
 import com.vompom.blog.ui.OnPostClick
-import com.vompom.blog.ui.OnTagClicked
+import com.vompom.blog.ui.OnTagClick
+import com.vompom.blog.ui.StatsScene
 import com.vompom.blog.ui.component.TagItem
 import com.vompom.blog.ui.utils.formatDate
+import com.vompom.blog.utils.countChineseChars
 
 /**
  *
@@ -31,18 +34,15 @@ import com.vompom.blog.ui.utils.formatDate
  *
  * @Description
  */
-enum class PostItemScene {
-    DEFAULT, CHARACTER,
-}
 
 @Composable
 fun PostSummary(
     data: Post,
     index: Int,
-    scene: PostItemScene = PostItemScene.DEFAULT,
+    scene: StatsScene = StatsScene.DEFAULT,
     onPostClick: OnPostClick = {},
-    onTagClicked: OnTagClicked = {},
-    onCategoryClicked: OnCategoryClicked = {},
+    onTagClick: OnTagClick = {},
+    onCategoryClick: OnCategoryClick = {},
 ) {
     Box(
         modifier = Modifier
@@ -57,26 +57,54 @@ fun PostSummary(
         Column(
             modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start
         ) {
-            Title(scene, data.title, index)
+            Title(scene, data.title, 0, index)
             Spacer(Modifier.height(3.dp))
 
-            if (scene == PostItemScene.DEFAULT) {
-                TimeAndCategories(index, data.date, data.categories, onCategoryClicked)
+            if (scene == StatsScene.DEFAULT) {
+                TimeAndCategories(index, data.date, data.categories, onCategoryClick)
                 Spacer(Modifier.height(5.dp))
                 Summary(data.content)
                 Spacer(Modifier.height(5.dp))
-                Tags(data.tags, onTagClicked)
+                Tags(data.tags, onTagClick)
             }
         }
     }
 }
 
+
 @Composable
-private fun Title(scene: PostItemScene, title: String, index: Int) {
+fun PostSimple(
+    data: PostV2,
+    index: Int,
+    scene: StatsScene = StatsScene.DEFAULT,
+    onPostClick: OnPostClick = {},
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 2.dp, vertical = 4.dp)
+            .shadow(elevation = 1.dp, shape = RoundedCornerShape(5.dp))
+            .border(0.dp, Color.Gray, RoundedCornerShape(5.dp))
+            .background(MaterialTheme.colorScheme.onSecondary)
+            .padding(5.dp)
+            .clickable(onClick = { onPostClick(Post(title = data.title, url = data.url)) }),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Title(scene, data.title, countChineseChars(data.content), index)
+            Spacer(Modifier.height(3.dp))
+        }
+    }
+}
+
+@Composable
+private fun Title(scene: StatsScene, title: String, contentLength: Int, index: Int) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        if (scene == PostItemScene.CHARACTER) {
+        if (scene == StatsScene.CHARACTER) {
             Text(
-                text = "[${title.length}字]",
+                text = "[${contentLength}字]",
                 fontSize = 10.sp,
                 modifier = Modifier.padding(end = 4.dp)
             )
@@ -85,7 +113,7 @@ private fun Title(scene: PostItemScene, title: String, index: Int) {
             text = title,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
-            color = Color(0xFF333333), // 对应 app.color.text_content
+            color = Color(0xFF333333),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -97,7 +125,7 @@ private fun TimeAndCategories(
     index: Int,
     date: String,
     categories: List<Category>,
-    onCategoryClicked: OnCategoryClicked,
+    onCategoryClick: OnCategoryClick,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -123,20 +151,19 @@ private fun TimeAndCategories(
             text = formatDate(date),
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
-            color = Color(0xFF888888) // 对应 app.color.post_time
+            color = Color(0xFF888888)
         )
 
-        // 分类
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             categories.forEach { category ->
-                CategoryItem(category, onCategoryClicked)
+                CategoryItem(category, onCategoryClick)
             }
         }
     }
 }
 
 @Composable
-private fun CategoryItem(category: Category, onCategoryClicked: OnCategoryClicked) {
+private fun CategoryItem(category: Category, onCategoryClick: OnCategoryClick) {
     Text(
         text = category.name,
         fontSize = 12.sp,
@@ -144,7 +171,7 @@ private fun CategoryItem(category: Category, onCategoryClicked: OnCategoryClicke
             .padding(horizontal = 6.dp, vertical = 2.dp)
             .background(MaterialTheme.colorScheme.surfaceTint, RoundedCornerShape(4.dp))
             .padding(horizontal = 4.dp)
-            .clickable(onClick = { onCategoryClicked(category) }),
+            .clickable(onClick = { onCategoryClick(category) }),
     )
 }
 
@@ -164,13 +191,13 @@ private fun Summary(content: String) {
 }
 
 @Composable
-private fun Tags(tags: List<Tag>, onTagClicked: OnTagClicked) {
+private fun Tags(tags: List<Tag>, onTagClick: OnTagClick) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier.padding(bottom = 5.dp)
     ) {
         tags.forEach { tag ->
-            TagItem(tag, false, onTagClicked)
+            TagItem(tag, false, onTagClick)
         }
     }
 }

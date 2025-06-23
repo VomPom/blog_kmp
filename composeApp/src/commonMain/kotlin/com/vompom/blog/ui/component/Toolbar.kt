@@ -15,8 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vompom.blog.ui.OnBackClick
 
 /**
  * Created by @juliswang on 2025/05/28 20:04
@@ -30,6 +32,7 @@ fun VMToolbar(
     title: String = "",
     icon: ImageVector? = null,
     withBackIcon: Boolean = false,
+    onBackClick: OnBackClick,
     action: (() -> Unit)? = null,
 ) {
     Row(
@@ -39,11 +42,10 @@ fun VMToolbar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            // todo:: back to last page...
             if (withBackIcon) {
                 IconButton(
                     modifier = Modifier.size(36.dp),
-                    onClick = { }) {
+                    onClick = { onBackClick() }) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Localized description"
@@ -55,6 +57,8 @@ fun VMToolbar(
                 text = title,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
         if (icon != null) {

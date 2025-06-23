@@ -89,6 +89,7 @@ kotlin {
             implementation(libs.androidx.datastore.preferences)
 
             implementation(libs.compose.webview.multiplatform)
+            implementation(libs.harawata.appdirs)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

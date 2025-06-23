@@ -13,6 +13,7 @@ import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewState
 import com.vompom.AppConfig
 import com.vompom.blog.navigation.Routes
+import com.vompom.blog.ui.OnBackClick
 import com.vompom.blog.ui.component.ScreenContainer
 import com.vompom.blog.viewmodel.PostViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -24,25 +25,25 @@ import org.koin.compose.viewmodel.koinViewModel
  * @Description
  */
 @Composable
-fun PostDetailScreen(data: Routes.PostDetail) {
+fun PostDetailScreen(data: Routes.PostDetail, onBackClick: OnBackClick) {
     val viewModel = koinViewModel<PostViewModel>()
 
     val state = rememberWebViewState("${AppConfig.BASE_URL}/${data.url}")
     Scaffold(
         modifier = Modifier
     ) { paddingValues ->
-        ScreenContainer(data.title, withBackIcon = true, paddingValues = paddingValues) {
+        ScreenContainer(data.title, onBackClick, withBackIcon = true, paddingValues = paddingValues) {
             Box(
                 Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
+                if (state.isLoading) {
+                    Text(text = "Loading...", style = TextStyle(fontSize = 20.sp))
+                }
                 WebView(
                     state = state,
                     modifier = Modifier.fillMaxSize()
                 )
-                if (state.isLoading) {
-                    Text(text = "Loading...", style = TextStyle(fontSize = 20.sp))
-                }
             }
         }
     }

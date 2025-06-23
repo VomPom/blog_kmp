@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.vompom.blog.ui.OnBackClick
 
 /**
  *
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ScreenContainer(
     title: String = "",
+    onBackClick: OnBackClick,
     icon: ImageVector? = null,
     withBackIcon: Boolean = false,
     action: (() -> Unit)? = null,
@@ -30,7 +32,7 @@ fun ScreenContainer(
             end = 10.dp
         ),
     ) {
-        VMToolbar(title, icon, withBackIcon, action)
+        VMToolbar(title, icon, withBackIcon, onBackClick, action)
         content()
     }
 }

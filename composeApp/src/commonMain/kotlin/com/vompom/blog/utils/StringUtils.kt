@@ -35,10 +35,20 @@ fun calLetter(post: PostV2): Int {
  * 统计字符串中的中文字符数量
  */
 fun countChineseChars(str: String?): Int {
-    if (str.isNullOrEmpty()) {
-        return 0
-    }
+    if (str.isNullOrEmpty()) return 0
 
-    val chineseRegex = Regex("""[\u4e00-\u9fa5]""") // 匹配中文字符的正则
-    return chineseRegex.findAll(str).count()
+    var count = 0
+    val length = str.length
+    var i = 0
+
+    // 手动遍历避免迭代器开销
+    while (i < length) {
+        val char = str[i]
+        // 使用整数比较替代范围检查
+        if (char.code >= 0x4e00 && char.code <= 0x9fa5) {
+            count++
+        }
+        i++
+    }
+    return count
 }
