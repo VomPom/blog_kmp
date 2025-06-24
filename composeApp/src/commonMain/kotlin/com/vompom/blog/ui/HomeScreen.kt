@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.vompom.blog.navigation.NavigationActions
-import com.vompom.blog.ui.post.PostScreen
+import com.vompom.blog.ui.post.PostPanelScreen
 
 /**
  *
@@ -36,7 +36,7 @@ fun HomeScreen(navController: NavHostController, navigationActions: NavigationAc
         ) { page ->
             when (craneScreenValues[page]) {
                 HomeScreenType.Post -> {
-                    PostScreen(
+                    PostPanelScreen(
                         onBackClick = { navController.popBackStack() },
                         onPostClick = { post -> navigationActions.goToPostDetail(post) },
                         onTagClick = { tag -> navigationActions.goToPostType(tag) },

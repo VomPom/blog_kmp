@@ -23,7 +23,7 @@ import org.koin.compose.viewmodel.koinViewModel
  * @Description
  */
 @Composable
-fun PostScreen(
+fun PostListScreen(
     onBackClick: OnBackClick,
     onPostClick: OnPostClick,
     onTagClick: OnTagClick,
@@ -42,7 +42,7 @@ fun PostScreen(
         onBackClick,
         withBackIcon = false,
         icon = Icons.Rounded.Refresh,
-        action = {
+        rightAction = {
             viewModel.fresh()
         }) {
         ContentColumn(

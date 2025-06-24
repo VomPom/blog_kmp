@@ -14,15 +14,15 @@ import kotlinx.coroutines.flow.Flow
  */
 
 class StatsRepository(private val api: StatsApi, private val postApi: PostApi) : BaseRepository() {
-    fun loadAllPost(): Flow<List<PostV2>> = load("allPosts") {
+    fun loadAllPost(isRefresh: Boolean): Flow<List<PostV2>> = load("allPosts", isRefresh) {
         postApi.getAllPost()?.data ?: emptyList()
     }
 
-    fun loadTags(): Flow<List<Tag>> = load("tag") {
+    fun loadTags(isRefresh: Boolean): Flow<List<Tag>> = load("tag", isRefresh) {
         api.loadTags().data
     }
 
-    fun loadCategories(): Flow<List<Category>> = load("category") {
+    fun loadCategories(isRefresh: Boolean): Flow<List<Category>> = load("category", isRefresh) {
         api.loadCategories().data
     }
 

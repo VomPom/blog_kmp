@@ -28,7 +28,7 @@ import org.jetbrains.compose.resources.painterResource
 fun CategoryItem(
     data: Category,
     contentSize: Float = 12f,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Row(
         modifier = Modifier
@@ -48,13 +48,13 @@ fun CategoryItem(
         Text(
             text = data.name,
             color = MaterialTheme.colorScheme.onSurface,
-            fontSize = contentSize.sp
+            fontSize = (contentSize + 2).sp
         )
 
         Text(
             text = "(${data.count})",
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-            fontSize = 12.sp
+            fontSize = (contentSize).sp
         )
     }
 }

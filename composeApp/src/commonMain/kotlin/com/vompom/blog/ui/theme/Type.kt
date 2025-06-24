@@ -26,19 +26,6 @@ import androidx.compose.ui.unit.sp
  *
  * @Description
  */
-//private val Montserrat = FontFamily(
-//    Font(Res.font.domine_bold as FontResource),
-//    Font(R.font.montserrat_medium, FontWeight.W500),
-//    Font(R.font.montserrat_semibold, FontWeight.W600)
-//)
-//
-///**
-// * https://fonts.google.com/specimen/Domine
-// */
-//private val Domine = FontFamily(
-//    Font(R.font.domine_regular),
-//    Font(R.font.domine_bold, FontWeight.Bold)
-//)
 
 val VMTypography = Typography(
     displayLarge = TextStyle(

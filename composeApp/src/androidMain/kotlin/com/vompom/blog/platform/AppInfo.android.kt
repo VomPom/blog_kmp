@@ -22,7 +22,6 @@ actual class AppInstallInfo actual constructor() {
         }
     }
 
-    actual fun getInstallTime(): Long = packageInfo.firstInstallTime
     actual fun getUpdateTime(): Long = packageInfo.lastUpdateTime
 
 }

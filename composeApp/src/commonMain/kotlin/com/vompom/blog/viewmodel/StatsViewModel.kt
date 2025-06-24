@@ -32,16 +32,16 @@ class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
     val letterCntState: StateFlow<Int> = _letterCntState.asStateFlow()
 
     var loaded = false
-    fun loadData() {
-        if (loaded) {
+    fun loadData(isRefresh: Boolean = false) {
+        if (!isRefresh && loaded) {
             return
         }
         loaded = true
-        load({ repository.loadAllPost() }, _postsState) {
+        load(isRefresh, { repository.loadAllPost(isRefresh) }, _postsState) {
             calLetterCnt()
         }
-        load({ repository.loadCategories() }, _categoriesState)
-        load({ repository.loadTags() }, _tagsState)
+        load(isRefresh, { repository.loadCategories(isRefresh) }, _categoriesState)
+        load(isRefresh, { repository.loadTags(isRefresh) }, _tagsState)
     }
 
     /**
@@ -61,6 +61,7 @@ class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
     }
 
     private fun <T> load(
+        isRefresh: Boolean,
         load: suspend () -> Flow<List<T>>,
         state: MutableStateFlow<ListDataState<T>>,
         additionAction: () -> Unit = {},
@@ -73,7 +74,10 @@ class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
                 state.update {
                     it.copy(
                         isLoading = false,
-                        data = it.data + result
+                        data = if (isRefresh)
+                            result
+                        else
+                            it.data + result
                     )
                 }
                 additionAction()

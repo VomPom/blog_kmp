@@ -30,6 +30,8 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
     private val _postsState = MutableStateFlow(ListDataState<PostV2>())
     val postsState: StateFlow<ListDataState<PostV2>> = _postsState.asStateFlow()
 
+    private val _updateTimeState = MutableStateFlow("")
+    val updateTimeState: StateFlow<String> = _updateTimeState.asStateFlow()
 
     private val _pages = mutableStateListOf<Page>()
     private var _maxPage = 0
@@ -132,6 +134,12 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
     }
 
     fun fresh() {
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+                data = emptyList()
+            )
+        }
         _pages.clear()
         paginator.reset()
         loadPosts(this.pageApi)

@@ -91,7 +91,7 @@ fun PostTypeScreen(
 
 fun LazyListScope.sortedList(
     sortData: List<PostV2>,
-    scene: StatsScene,
+    scene: Int,
     onPostClick: OnPostClick,
 ) {
     items(sortData.size) { index ->

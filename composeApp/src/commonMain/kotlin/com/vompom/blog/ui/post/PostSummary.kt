@@ -5,17 +5,20 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import blog_kmp.composeapp.generated.resources.Res
+import blog_kmp.composeapp.generated.resources.ic_folder
 import com.vompom.blog.data.model.Category
 import com.vompom.blog.data.model.Post
 import com.vompom.blog.data.model.PostV2
@@ -27,6 +30,7 @@ import com.vompom.blog.ui.StatsScene
 import com.vompom.blog.ui.component.TagItem
 import com.vompom.blog.ui.utils.formatDate
 import com.vompom.blog.utils.countChineseChars
+import org.jetbrains.compose.resources.painterResource
 
 /**
  *
@@ -39,7 +43,7 @@ import com.vompom.blog.utils.countChineseChars
 fun PostSummary(
     data: Post,
     index: Int,
-    scene: StatsScene = StatsScene.DEFAULT,
+    scene: Int = StatsScene.DEFAULT,
     onPostClick: OnPostClick = {},
     onTagClick: OnTagClick = {},
     onCategoryClick: OnCategoryClick = {},
@@ -49,13 +53,18 @@ fun PostSummary(
             .fillMaxWidth()
             .padding(horizontal = 2.dp, vertical = 4.dp)
             .shadow(elevation = 1.dp, shape = RoundedCornerShape(5.dp))
-            .border(0.dp, Color.Gray, RoundedCornerShape(5.dp))
+            .border(
+                0.dp,
+                MaterialTheme.colorScheme.surfaceTint,
+                RoundedCornerShape(5.dp)
+            )
             .background(MaterialTheme.colorScheme.onSecondary)
             .padding(5.dp)
             .clickable(onClick = { onPostClick(data) })
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
         ) {
             Title(scene, data.title, 0, index)
             Spacer(Modifier.height(3.dp))
@@ -76,7 +85,7 @@ fun PostSummary(
 fun PostSimple(
     data: PostV2,
     index: Int,
-    scene: StatsScene = StatsScene.DEFAULT,
+    scene: Int = StatsScene.DEFAULT,
     onPostClick: OnPostClick = {},
 ) {
     Box(
@@ -84,7 +93,11 @@ fun PostSimple(
             .fillMaxWidth()
             .padding(horizontal = 2.dp, vertical = 4.dp)
             .shadow(elevation = 1.dp, shape = RoundedCornerShape(5.dp))
-            .border(0.dp, Color.Gray, RoundedCornerShape(5.dp))
+            .border(
+                0.dp,
+                MaterialTheme.colorScheme.surfaceTint,
+                RoundedCornerShape(5.dp)
+            )
             .background(MaterialTheme.colorScheme.onSecondary)
             .padding(5.dp)
             .clickable(onClick = { onPostClick(Post(title = data.title, url = data.url)) }),
@@ -100,7 +113,7 @@ fun PostSimple(
 }
 
 @Composable
-private fun Title(scene: StatsScene, title: String, contentLength: Int, index: Int) {
+private fun Title(scene: Int, title: String, contentLength: Int, index: Int) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (scene == StatsScene.CHARACTER) {
             Text(
@@ -113,7 +126,7 @@ private fun Title(scene: StatsScene, title: String, contentLength: Int, index: I
             text = title,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
-            color = Color(0xFF333333),
+            color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -151,7 +164,6 @@ private fun TimeAndCategories(
             text = formatDate(date),
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
-            color = Color(0xFF888888)
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -164,15 +176,27 @@ private fun TimeAndCategories(
 
 @Composable
 private fun CategoryItem(category: Category, onCategoryClick: OnCategoryClick) {
-    Text(
-        text = category.name,
-        fontSize = 12.sp,
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(horizontal = 6.dp, vertical = 2.dp)
-            .background(MaterialTheme.colorScheme.surfaceTint, RoundedCornerShape(4.dp))
-            .padding(horizontal = 4.dp)
-            .clickable(onClick = { onCategoryClick(category) }),
-    )
+            .clip(RoundedCornerShape(5.dp))
+            .background(MaterialTheme.colorScheme.background)
+            .clickable(onClick = { onCategoryClick(category) })
+            .padding(start = 4.dp, end = 2.dp),
+    ) {
+        Icon(
+            painter = painterResource(Res.drawable.ic_folder),
+            contentDescription = null,
+            modifier = Modifier.size(12.dp),
+            tint = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            text = category.name,
+            fontSize = 12.sp,
+            modifier = Modifier.padding(vertical = 2.dp, horizontal = 2.dp)
+        )
+    }
 }
 
 @Composable
@@ -185,7 +209,10 @@ private fun Summary(content: String) {
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFEEEEEE), RoundedCornerShape(5.dp)) // 对应 app.color.summary_bg
+            .background(
+                MaterialTheme.colorScheme.background,
+                RoundedCornerShape(5.dp)
+            )
             .padding(8.dp)
     )
 }

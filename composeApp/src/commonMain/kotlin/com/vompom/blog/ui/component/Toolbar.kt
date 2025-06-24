@@ -1,9 +1,6 @@
 package com.vompom.blog.ui.component
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,7 +50,7 @@ fun VMToolbar(
                 }
             }
             Text(
-                modifier = Modifier,
+                modifier = Modifier.padding(start = 4.dp),
                 text = title,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,

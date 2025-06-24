@@ -10,7 +10,6 @@ package com.vompom.blog.platform
 
 expect class AppInstallInfo() {
      fun getAppVersion(): String
-     fun getInstallTime(): Long
 
      fun getUpdateTime(): Long
 }

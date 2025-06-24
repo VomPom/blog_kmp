@@ -90,6 +90,9 @@ kotlin {
 
             implementation(libs.compose.webview.multiplatform)
             implementation(libs.harawata.appdirs)
+            implementation(libs.compose.multiplatform.material3.windowsizeclass)
+//            implementation(libs.richtext.commonmark)
+            implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc13")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

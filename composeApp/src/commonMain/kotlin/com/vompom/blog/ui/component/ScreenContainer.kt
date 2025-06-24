@@ -20,7 +20,7 @@ fun ScreenContainer(
     onBackClick: OnBackClick,
     icon: ImageVector? = null,
     withBackIcon: Boolean = false,
-    action: (() -> Unit)? = null,
+    rightAction: (() -> Unit)? = null,
     paddingValues: PaddingValues = PaddingValues(0.dp),
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -28,11 +28,11 @@ fun ScreenContainer(
         modifier = Modifier.fillMaxSize().padding(
             top = paddingValues.calculateTopPadding(),
             bottom = paddingValues.calculateBottomPadding(),
-            start = 10.dp,
-            end = 10.dp
+            start = 2.dp,
+            end = 2.dp
         ),
     ) {
-        VMToolbar(title, icon, withBackIcon, onBackClick, action)
+        VMToolbar(title, icon, withBackIcon, onBackClick, rightAction)
         content()
     }
 }

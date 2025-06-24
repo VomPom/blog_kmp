@@ -36,6 +36,7 @@ fun MineScreen(
     onBackClick: OnBackClick,
     onDebugClicked: () -> Unit,
 ) {
+
     ScreenContainer("我", onBackClick = onBackClick) {
         Info()
         Settings(onDebugClicked)
@@ -87,7 +88,6 @@ fun About() {
         Column {
             InfoItem("应用名称", AppConfig.BLOG_NAME)
             InfoItem("应用版本", appInfo.getAppVersion())
-            InfoItem("安装时间", TimeUtils.timeFormat(appInfo.getInstallTime()))
             InfoItem("更新时间", TimeUtils.timeFormat(appInfo.getUpdateTime()))
         }
     }

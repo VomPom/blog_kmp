@@ -18,11 +18,13 @@ class NavigationActions(navController: NavHostController) {
         when (it) {
             is Tag -> navController.navigate(Routes.PostType(it.api, it.name))
             is Category -> navController.navigate(Routes.PostType(it.api, it.name))
-            is StatsScene -> {
+            is Int -> {
                 val title = when (it) {
                     StatsScene.CHARACTER -> "字数统计"
-                    StatsScene.DEFAULT -> ""
                     StatsScene.ALL_POST -> "全部文章"
+                    else -> {
+                        ""
+                    }
                 }
                 navController.navigate(Routes.PostType(title = title, scene = it))
             }

@@ -15,13 +15,13 @@ object Routes {
     class PostType(
         val api: String = "",
         val title: String = "",
-        val scene: StatsScene = StatsScene.DEFAULT,
+        val scene: Int = StatsScene.DEFAULT,
     ) {
         fun isDefault(): Boolean = this.scene == StatsScene.DEFAULT
     }
 
     @Serializable
-    class PostDetail(val title: String, val url: String)
+    class PostDetail(val title: String, val url: String, val content: String = "")
 
     @Serializable
     class Home(val title: String = "")

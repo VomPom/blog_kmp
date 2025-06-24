@@ -71,15 +71,26 @@ open class BaseRepository {
      */
     inline fun <reified T> load(
         saveKey: String,
+        isRefresh: Boolean = false,
         crossinline netRequest: suspend () -> T,
     ): Flow<T> {
+        val fetchAndSave: suspend FlowCollector<T>.() -> Unit = {
+            val netResult = netRequest()
+            val encodeStr = Json.encodeToString(netResult)
+            if (encodeStr != "{}") {
+                saveData(saveKey, Json.encodeToString(netResult))
+            }
+            emit(netResult)
+        }
+
         return flow {
+            if (isRefresh) {
+                fetchAndSave()
+                return@flow
+            }
             loadLocalData<T>(saveKey).collect { result ->
                 if (result == null) {
-                    val netResult = netRequest()
-                    // todo:: optimize ...
-//                    saveData(saveKey, Json.encodeToString(netResult))
-                    emit(netResult)
+                    fetchAndSave()
                 } else {
                     emit(result as T)
                 }

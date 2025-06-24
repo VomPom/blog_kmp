@@ -50,7 +50,12 @@ fun StatsScreen(
     LaunchedEffect(Unit) {
         viewModel.loadData()
     }
-    ScreenContainer("统计", onBackClick, Icons.Filled.Refresh) {
+    ScreenContainer(
+        "统计", onBackClick, Icons.Filled.Refresh,
+        rightAction = {
+            viewModel.loadData(true)
+        }
+    ) {
         Summary(
             onStatsClick,
             postsState,
@@ -58,10 +63,10 @@ fun StatsScreen(
             categoriesState,
             letterCntState
         )
-        ContentContainer("#分类") {
+        ContentContainer("#分类", visibility = categoriesState.data.isNotEmpty()) {
             Categories(categoriesState, onCategoryClick)
         }
-        ContentContainer("#标签") {
+        ContentContainer("#标签", visibility = tagsState.data.isNotEmpty()) {
             Tags(tagsState, onTagClick)
         }
     }
@@ -194,16 +199,16 @@ fun StatsLabel(
     }
 }
 
-enum class StatsScene {
-    DEFAULT,
-    ALL_POST,
-    CHARACTER,
+object StatsScene {
+    const val DEFAULT = 0
+    const val ALL_POST = 1
+    const val CHARACTER = 2
 }
 
 typealias OnPostClick = (Post) -> Unit
 typealias OnCategoryClick = (Category) -> Unit
 typealias OnTagClick = (Tag) -> Unit
-typealias OnStatsClick = (StatsScene) -> Unit
+typealias OnStatsClick = (Int) -> Unit
 
 @Preview()
 @Composable

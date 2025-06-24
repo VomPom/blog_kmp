@@ -5,9 +5,6 @@ actual class AppInstallInfo actual constructor() {
         TODO("Not yet implemented")
     }
 
-    actual fun getInstallTime(): Long {
-        TODO("Not yet implemented")
-    }
 
     actual fun getUpdateTime(): Long {
         TODO("Not yet implemented")

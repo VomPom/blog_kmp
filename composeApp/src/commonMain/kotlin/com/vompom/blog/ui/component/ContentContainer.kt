@@ -25,36 +25,39 @@ import androidx.compose.ui.unit.sp
 fun ContentContainer(
     title: String,
     titleSize: TextUnit = 16.sp,
-    titleWeight: FontWeight = FontWeight.SemiBold,
-    content: @Composable ColumnScope.() -> Unit
+    titleWeight: FontWeight = FontWeight.Bold,
+    visibility: Boolean = true,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 10.dp)
-            .background(
-                color = MaterialTheme.colorScheme.onSecondary,
-                shape = RoundedCornerShape(5.dp)
-            )
-    ) {
-        Column(
+    if (visibility) {
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 5.dp, start = 5.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Column {
-                Text(
-                    text = title,
-                    style = TextStyle.Default.copy(
-                        fontSize = titleSize,
-                        fontWeight = titleWeight,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
-                    )
+                .padding(bottom = 10.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    shape = RoundedCornerShape(5.dp)
                 )
-                Spacer(modifier = Modifier.height(5.dp))
-                content()
-                Spacer(modifier = Modifier.height(10.dp))
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 5.dp, start = 5.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Column {
+                    Text(
+                        text = title,
+                        style = TextStyle.Default.copy(
+                            fontSize = titleSize,
+                            fontWeight = titleWeight,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    content()
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
             }
         }
     }
