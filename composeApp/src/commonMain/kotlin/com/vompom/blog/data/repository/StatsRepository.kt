@@ -1,5 +1,7 @@
 package com.vompom.blog.data.repository
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.vompom.blog.data.api.PostApi
 import com.vompom.blog.data.api.StatsApi
 import com.vompom.blog.data.model.Category
@@ -26,4 +28,5 @@ class StatsRepository(private val api: StatsApi, private val postApi: PostApi) :
         api.loadCategories().data
     }
 
+    override fun dataStoreInstance(): DataStore<Preferences> = blogStoreInstance()
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ContentContainer(
+    modifier: Modifier = Modifier,
     title: String,
     titleSize: TextUnit = 16.sp,
     titleWeight: FontWeight = FontWeight.Bold,
@@ -31,7 +32,7 @@ fun ContentContainer(
 ) {
     if (visibility) {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(bottom = 10.dp)
                 .background(

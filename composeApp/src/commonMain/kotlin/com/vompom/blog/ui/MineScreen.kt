@@ -4,14 +4,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,8 +22,11 @@ import com.vompom.AppConfig
 import com.vompom.blog.platform.AppInstallInfo
 import com.vompom.blog.ui.component.ContentContainer
 import com.vompom.blog.ui.component.ScreenContainer
+import com.vompom.blog.ui.theme.ThemeConstants
 import com.vompom.blog.utils.TimeUtils
+import com.vompom.blog.viewmodel.MineViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 /**
  * Created by @juliswang on 2025/05/22 19:12
@@ -33,13 +37,14 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 @Composable
 fun MineScreen(
+    title: String,
     onBackClick: OnBackClick,
     onDebugClicked: () -> Unit,
 ) {
-
-    ScreenContainer("我", onBackClick = onBackClick) {
+    val viewModel = koinViewModel<MineViewModel>()
+    ScreenContainer(title, onBackClick = onBackClick) {
         Info()
-        Settings(onDebugClicked)
+        Settings(onDebugClicked, viewModel)
         About()
     }
 }
@@ -74,9 +79,36 @@ fun Info() {
 }
 
 @Composable
-fun Settings(onDebugClicked: () -> Unit) {
-    ContentContainer("设置", 15.sp, FontWeight.Bold) {
-        InfoItem("Debug", "", modifier = Modifier.clickable { onDebugClicked() })
+fun Settings(onDebugClicked: () -> Unit, mineViewModel: MineViewModel) {
+    val themeState by mineViewModel.appTheme.collectAsState()
+    val uiChecked by remember(themeState) { derivedStateOf { themeState == ThemeConstants.DARK } }
+
+    ContentContainer(
+        title = "设置",
+        titleSize = 15.sp,
+        titleWeight = FontWeight.Bold
+    ) {
+        SettingsItem(
+            title = "深色模式",
+        ) {
+            Switch(
+                modifier = Modifier.height(15.dp).graphicsLayer {
+                    scaleX = 0.7f
+                    scaleY = 0.7f
+                },
+                checked = uiChecked,
+                onCheckedChange = {
+                    mineViewModel.saveTheme(
+                        if (it)
+                            ThemeConstants.DARK
+                        else
+                            ThemeConstants.NORMAL
+                    )
+                })
+        }
+        SettingsItem(title = "Debug") {
+            Box(modifier = Modifier.fillMaxWidth().clickable { onDebugClicked() })
+        }
     }
 }
 
@@ -84,12 +116,32 @@ fun Settings(onDebugClicked: () -> Unit) {
 fun About() {
     val appInfo = remember { AppInstallInfo() }
     // 在 Compose 中启动一个协程来获取版本号
-    ContentContainer("关于", 15.sp, FontWeight.Bold) {
+    ContentContainer(title = "关于", titleSize = 15.sp, titleWeight = FontWeight.Bold) {
         Column {
             InfoItem("应用名称", AppConfig.BLOG_NAME)
             InfoItem("应用版本", appInfo.getAppVersion())
             InfoItem("更新时间", TimeUtils.timeFormat(appInfo.getUpdateTime()))
         }
+    }
+}
+
+@Composable
+fun SettingsItem(
+    modifier: Modifier = Modifier,
+    title: String,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(5.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = title,
+            style = TextStyle(fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface),
+        )
+        content()
     }
 }
 

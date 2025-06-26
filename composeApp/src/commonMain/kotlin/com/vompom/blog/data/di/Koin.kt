@@ -5,7 +5,10 @@ import com.vompom.blog.data.api.PostApiImpl
 import com.vompom.blog.data.api.StatsApi
 import com.vompom.blog.data.api.StatsApiImpl
 import com.vompom.blog.data.repository.PostRepository
+import com.vompom.blog.data.repository.SettingsRepository
 import com.vompom.blog.data.repository.StatsRepository
+import com.vompom.blog.viewmodel.MainViewModel
+import com.vompom.blog.viewmodel.MineViewModel
 import com.vompom.blog.viewmodel.PostViewModel
 import com.vompom.blog.viewmodel.StatsViewModel
 import io.ktor.client.*
@@ -47,11 +50,14 @@ val dataModule = module {
 
     single<StatsApi> { StatsApiImpl(get()) }
     single { StatsRepository(get(), get()) }
+    single { SettingsRepository() }
 
 }
 val viewModelModule = module {
     factoryOf(::PostViewModel)
     factoryOf(::StatsViewModel)
+    factoryOf(::MineViewModel)
+    factoryOf(::MainViewModel)
 }
 
 fun initKoin(additionAppDeclaration: KoinAppDeclaration) {

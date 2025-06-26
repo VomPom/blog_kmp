@@ -11,11 +11,11 @@ import org.koin.android.ext.koin.androidContext
  * @Description
  */
 
-class VMBlogApp : Application() {
+class VMApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         initKoin {
-            androidContext(this@VMBlogApp)
+            androidContext(this@VMApplication)
         }
     }
 }

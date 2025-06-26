@@ -9,14 +9,17 @@ import kotlinx.io.files.SystemFileSystem
 import net.harawata.appdirs.AppDirsFactory
 import okio.Path.Companion.toPath
 
-actual fun createDataStore(): DataStore<Preferences> {
+actual fun createBlogStore(): DataStore<Preferences> = createDataStore("vm_blog")
+
+actual fun creatSettingsStore(): DataStore<Preferences> = createDataStore("settings")
+
+private fun createDataStore(name: String): DataStore<Preferences> {
     val userDataDir: String = AppDirsFactory.getInstance()
         .getUserDataDir("com.vompom.blog", "", AppConfig.AUTHOR)
-
     val path = Path(userDataDir)
     with(SystemFileSystem) { if (!exists(path)) createDirectories(path) }
 
     return PreferenceDataStoreFactory.createWithPath(
-        produceFile = { (path.toString().plus("/vm_blog.preferences_pb")).toPath() }
+        produceFile = { (path.toString().plus("/${name}.preferences_pb")).toPath() }
     )
 }

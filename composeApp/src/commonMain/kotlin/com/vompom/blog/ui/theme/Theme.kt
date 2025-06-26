@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import com.vompom.blog.platform.StatusAppearanceColor
 
 /**
  * Created by @juliswang on 2025/06/06 20:42
@@ -124,12 +125,18 @@ private val DarkColors = darkColorScheme(
 @Composable
 fun VMTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
+    StatusAppearanceColor(darkTheme)
     MaterialTheme(
         colorScheme = if (darkTheme) DarkColors else LightColors,
         typography = VMTypography,
         shapes = VMShapes,
         content = content
     )
+}
+
+object ThemeConstants {
+    const val NORMAL = 0
+    const val DARK = 1
 }

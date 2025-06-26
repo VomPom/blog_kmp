@@ -23,9 +23,7 @@ import com.vompom.blog.ui.component.CategoryItem
 import com.vompom.blog.ui.component.ContentContainer
 import com.vompom.blog.ui.component.ScreenContainer
 import com.vompom.blog.ui.component.TagItem
-import com.vompom.blog.ui.utils.PreviewWrapper
 import com.vompom.blog.viewmodel.StatsViewModel
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -36,6 +34,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsScreen(
+    title: String,
     onBackClick: OnBackClick,
     onTagClick: OnTagClick,
     onCategoryClick: OnCategoryClick,
@@ -51,7 +50,9 @@ fun StatsScreen(
         viewModel.loadData()
     }
     ScreenContainer(
-        "统计", onBackClick, Icons.Filled.Refresh,
+        title,
+        onBackClick,
+        Icons.Filled.Refresh,
         rightAction = {
             viewModel.loadData(true)
         }
@@ -63,10 +64,10 @@ fun StatsScreen(
             categoriesState,
             letterCntState
         )
-        ContentContainer("#分类", visibility = categoriesState.data.isNotEmpty()) {
+        ContentContainer(title = "#分类", visibility = categoriesState.data.isNotEmpty()) {
             Categories(categoriesState, onCategoryClick)
         }
-        ContentContainer("#标签", visibility = tagsState.data.isNotEmpty()) {
+        ContentContainer(title = "#标签", visibility = tagsState.data.isNotEmpty()) {
             Tags(tagsState, onTagClick)
         }
     }
@@ -209,14 +210,3 @@ typealias OnPostClick = (Post) -> Unit
 typealias OnCategoryClick = (Category) -> Unit
 typealias OnTagClick = (Tag) -> Unit
 typealias OnStatsClick = (Int) -> Unit
-
-@Preview()
-@Composable
-fun StatsItemPre() {
-    PreviewWrapper {
-        ContentContainer("标签") {
-            Text("2132")
-        }
-    }
-
-}

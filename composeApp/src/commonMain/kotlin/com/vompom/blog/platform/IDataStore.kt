@@ -10,4 +10,6 @@ import androidx.datastore.preferences.core.Preferences
  * @Description
  */
 
-expect fun createDataStore(): DataStore<Preferences>
+expect fun createBlogStore(): DataStore<Preferences>
+
+expect fun creatSettingsStore(): DataStore<Preferences>

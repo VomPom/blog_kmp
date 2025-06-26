@@ -14,7 +14,6 @@ import com.vompom.blog.ui.component.TwoPanelScaffold
 import com.vompom.blog.utils.ext.isCompact
 
 /**
- * Copyright (C) @2025 THL A29 Limited, a Tencent company. All rights reserved.
  *
  * Created by @juliswang on 2025/06/24 11:11
  *

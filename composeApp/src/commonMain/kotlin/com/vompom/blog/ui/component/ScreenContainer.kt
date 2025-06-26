@@ -28,8 +28,8 @@ fun ScreenContainer(
         modifier = Modifier.fillMaxSize().padding(
             top = paddingValues.calculateTopPadding(),
             bottom = paddingValues.calculateBottomPadding(),
-            start = 2.dp,
-            end = 2.dp
+            start = 4.dp,
+            end = 4.dp
         ),
     ) {
         VMToolbar(title, icon, withBackIcon, onBackClick, rightAction)

@@ -1,10 +1,13 @@
 package com.vompom.blog.ui.component
 
+import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
+import com.vompom.blog.ui.utils.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -73,14 +76,27 @@ class Paginator<T>(
 
 @Composable
 fun OnPagination(
-    listState: LazyListState,
+    listState: ScrollableState,
     buffer: Int = 5,
     onLoadMore: () -> Unit,
 ) {
     val shouldLoadMore = remember {
         derivedStateOf {
-            listState.layoutInfo.visibleItemsInfo.isNotEmpty() &&
-                    listState.layoutInfo.visibleItemsInfo.last().index >= listState.layoutInfo.totalItemsCount - 3
+            when (listState) {
+                is LazyListState -> {
+                    listState.layoutInfo.visibleItemsInfo.isNotEmpty() &&
+                            listState.layoutInfo.visibleItemsInfo.last().index >= listState.layoutInfo.totalItemsCount - 3
+                }
+
+                is LazyStaggeredGridState -> {
+                    listState.layoutInfo.visibleItemsInfo.isNotEmpty() &&
+                            listState.layoutInfo.visibleItemsInfo.last().index >= listState.layoutInfo.totalItemsCount - 1
+                }
+
+                else -> {
+                    false
+                }
+            }
         }
     }
 

@@ -127,7 +127,6 @@ private fun Title(scene: Int, title: String, contentLength: Int, index: Int) {
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
     }
