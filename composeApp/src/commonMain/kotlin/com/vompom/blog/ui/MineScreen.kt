@@ -25,7 +25,6 @@ import com.vompom.blog.ui.component.ScreenContainer
 import com.vompom.blog.ui.theme.ThemeConstants
 import com.vompom.blog.utils.TimeUtils
 import com.vompom.blog.viewmodel.MineViewModel
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -34,7 +33,6 @@ import org.koin.compose.viewmodel.koinViewModel
  * @Description
  */
 
-@Preview
 @Composable
 fun MineScreen(
     title: String,

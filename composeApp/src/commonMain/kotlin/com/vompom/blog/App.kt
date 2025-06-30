@@ -15,12 +15,10 @@ import com.vompom.blog.ui.post.PostDetailScreen
 import com.vompom.blog.ui.post.PostTypeScreen
 import com.vompom.blog.ui.theme.VMTheme
 import com.vompom.blog.viewmodel.MainViewModel
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-@Preview
 fun App() {
     val mainViewModel = koinViewModel<MainViewModel>()
     val appThemeState by mainViewModel.appTheme.collectAsState()

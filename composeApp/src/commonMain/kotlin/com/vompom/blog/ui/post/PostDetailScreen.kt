@@ -10,8 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
-import com.mohamedrejeb.richeditor.model.rememberRichTextState
-import com.mohamedrejeb.richeditor.ui.material.RichText
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewState
 import com.vompom.AppConfig
@@ -31,7 +29,6 @@ fun PostDetailScreen(
     onBackClick: OnBackClick,
 ) {
     val state = rememberWebViewState("${AppConfig.BASE_URL}/${data.url}")
-    val richTextState = rememberRichTextState()
 
     Scaffold(
         modifier = Modifier
@@ -42,12 +39,9 @@ fun PostDetailScreen(
                 contentAlignment = Alignment.Center
             ) {
                 if (data.content.isNotEmpty()) {
-                    richTextState.setMarkdown(data.content)
                     Column {
-                        RichText(
-                            state = richTextState,
-                            modifier = Modifier.fillMaxSize()
-                        )
+                        // todo:: render content.
+                        Text(data.content)
                     }
                 } else {
                     if (state.isLoading) {

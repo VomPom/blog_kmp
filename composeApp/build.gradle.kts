@@ -14,6 +14,9 @@ plugins {
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
@@ -58,9 +61,11 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.coil.network.okhttp)
+
         }
         commonMain.dependencies {
-            implementation(compose.preview)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -83,7 +88,6 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.coil.compose)
-            implementation(libs.coil.network.okhttp)
 
             implementation(libs.kotlinx.datetime)
             implementation(libs.androidx.datastore.preferences)
@@ -91,11 +95,12 @@ kotlin {
             implementation(libs.compose.webview.multiplatform)
             implementation(libs.harawata.appdirs)
             implementation(libs.compose.multiplatform.material3.windowsizeclass)
-//            implementation(libs.richtext.commonmark)
-            implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc13")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

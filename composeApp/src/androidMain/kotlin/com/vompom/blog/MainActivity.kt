@@ -9,7 +9,6 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.tooling.preview.Preview
 import com.vompom.blog.ui.component.LocalWindowSizeClass
 
 class MainActivity : ComponentActivity() {
@@ -26,10 +25,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    App()
 }
