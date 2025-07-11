@@ -56,7 +56,7 @@ fun PostListScreen(
         withBackIcon = false,
         icon = Icons.Rounded.Refresh,
         rightAction = {
-            viewModel.fresh()
+            viewModel.refresh()
         }) {
         ContentColumn(
             modifier = Modifier.fillMaxSize(),

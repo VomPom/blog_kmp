@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 
 class PostViewModel(private val repository: PostRepository) : ViewModel() {
     var pageApi: String = ""
+    private var initialized: Boolean = false
     private val _uiState = MutableStateFlow(ListDataState<Post>())
     val uiState: StateFlow<ListDataState<Post>> = _uiState.asStateFlow()
 
@@ -128,12 +129,17 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
         }
     }
 
-    fun loadPosts(pagApi: String) {
+    fun loadPosts(pagApi: String, isLoadMore: Boolean = false) {
+        // todo:: use better way to solve LaunchedEffect every time called.
+        if (initialized && !isLoadMore) {
+            return
+        }
+        initialized = true
         this.pageApi = pagApi
         paginator.loadNextItems()
     }
 
-    fun fresh() {
+    fun refresh() {
         _uiState.update {
             it.copy(
                 isLoading = true,
@@ -142,8 +148,9 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
         }
         _pages.clear()
         paginator.reset()
+        initialized = false
         loadPosts(this.pageApi)
     }
 
-    fun loadMore() = loadPosts(this.pageApi)
+    fun loadMore() = loadPosts(this.pageApi, true)
 }

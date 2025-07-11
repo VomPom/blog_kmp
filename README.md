@@ -1,21 +1,109 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop.
+# Blog-KMP
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+[![Build](https://github.com/xxfast/NYTimes-KMP/actions/workflows/build.yml/badge.svg)](https://github.com/xxfast/NYTimes-KMP/actions/workflows/build.yml)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.1.21-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+![badge-android](http://img.shields.io/badge/platform-android-6EDB8D.svg?style=flat)
+![badge-desktop](http://img.shields.io/badge/platform-desktop-4D76CD.svg?style=flat)
+![badge-ios](http://img.shields.io/badge/platform-ios-EAEAEA.svg?style=flat)
+![koin](http://img.shields.io/badge/koin.svg?style=flat)
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+A KMP app built based on the api provided by my [personal blog](https://julis.wang)
+
+## Libraries used
+
+- 🧩 [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform); for shared UI
+- 🌐 [Ktor](https://github.com/ktorio/ktor); for Injection
+- 🌃 [Coil](https://github.com/coil-kt/coil); for image loading
+- 🖥️ [Webview](https://github.com/KevinnZou/compose-webview-multiplatform); for web url loading
+- 💉 [Koin](https://github.com/InsertKoinIO/koin); for Injection
+- 📦 [Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization); for content negotiation
+- 🕰️ [Kotlinx Datetime](https://github.com/Kotlin/kotlinx-datetime); for datetime
+- 🗃️ [Datastore](https://developer.android.com/topic/libraries/architecture/datastore); for storage
+
+## Main Features
+
+- Blog
+    - Blog post list
+    - Blog post details
+- Stats
+    - Blog tag statistics
+    - Blog classification statistics
+    - Blog word count
+    - Recommended TV Series
+- Mine
+    - Dark mode switch
+    - About info
 
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+## Showcase
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+### Android
 
-You can open the web application by running the `:composeApp:wasmJsBrowserDevelopmentRun` Gradle task.
+<div>
+      <img src=".img/android/1.png" width="20%" alt="博客列表" />
+      <img src=".img/android/2.png" width="20%" alt="统计" />
+      <img src=".img/android/3.png" width="20%" alt="我" />
+</div>
+
+#### Dark Mode
+
+<div>
+      <img src=".img/dark/1.png" width="20%" alt="博客列表" />
+      <img src=".img/dark/2.png" width="20%" alt="统计" />
+      <img src=".img/dark/3.png" width="20%" alt="我" />
+</div>
+
+### iOS
+
+<div>
+      <img src=".img/ios/1.jpg" width="20%" alt="博客列表" />
+      <img src=".img/ios/2.jpg" width="20%" alt="统计" />
+      <img src=".img/ios/3.jpg" width="20%" alt="我" />
+</div>
+
+### Desktop
+
+<div>
+      <img src=".img/desktop/1.png" width="30%" alt="博客列表" />
+      <img src=".img/desktop/2.png" width="30%" alt="统计" />
+      <img src=".img/desktop/3.png" width="30%" alt="我" />
+</div>
+
+## Before running!
+
+- check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
+- install JDK 17 or higher on your machine
+- add `local.properties` file to the project root and set a path to Android SDK there
+
+## Run instructions
+
+<img alt="run-config.png" src=".img/run-config.png" />
+
+### Android
+
+To run the application on Android device/emulator:
+
+- open the project in Android Studio and run the imported android run configuration
+
+To build the application bundle:
+
+- run `./gradlew :composeApp:assembleDebug`
+- find `.apk` file in `composeApp/build/outputs/apk/debug/composeApp-debug.apk`
+
+### iOS
+
+To run the application on an iPhone device/simulator:
+
+- Open `iosApp/iosApp.xcproject` in Xcode and run standard configuration
+- Or
+  use [Kotlin Multiplatform Mobile plugin](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile)
+  for Android Studio
+
+### Desktop
+
+- Run the desktop application: `./gradlew :composeApp:run`
+
+
+
+
+

@@ -19,3 +19,5 @@ expect fun getCurrentThread(): String
  */
 @Composable
 expect fun StatusAppearanceColor(isDark: Boolean)
+
+expect fun openWebBrowser(url: String)

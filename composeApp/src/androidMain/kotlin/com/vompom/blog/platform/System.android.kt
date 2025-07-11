@@ -18,3 +18,6 @@ actual fun StatusAppearanceColor(isDark: Boolean) {
     }
 }
 
+actual fun openWebBrowser(url: String) {
+    // no-op
+}

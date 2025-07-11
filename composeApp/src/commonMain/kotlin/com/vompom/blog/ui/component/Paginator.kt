@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
-import com.vompom.blog.ui.utils.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -77,7 +76,6 @@ class Paginator<T>(
 @Composable
 fun OnPagination(
     listState: ScrollableState,
-    buffer: Int = 5,
     onLoadMore: () -> Unit,
 ) {
     val shouldLoadMore = remember {
